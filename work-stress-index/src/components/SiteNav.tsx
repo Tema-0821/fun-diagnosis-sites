@@ -3,9 +3,10 @@ import Link from "next/link";
 const TABS = [
   { href: "/", label: "😮‍💨 스트레스 지수" },
   { href: "/burnout", label: "🕯️ 번아웃 자가진단" },
+  { href: "/healing", label: "🌿 힐링 방법 추천" },
 ] as const;
 
-export function SiteNav({ active }: { active: "/" | "/burnout" }) {
+export function SiteNav({ active }: { active: "/" | "/burnout" | "/healing" }) {
   return (
     <div className="mt-6 flex w-full gap-1 border border-[#e7ddc9] bg-white/60 p-1">
       {TABS.map((tab) => (
