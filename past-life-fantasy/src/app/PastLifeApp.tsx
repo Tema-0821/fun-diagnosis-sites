@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -12,7 +13,6 @@ import {
 } from "@/lib/pastlife/archetype";
 import { PAST_QUESTIONS, PAST_TEMPLATES } from "@/lib/pastlife/pastQuiz";
 import { REBIRTH_QUESTIONS, REBIRTH_TEMPLATES } from "@/lib/pastlife/rebirthQuiz";
-import { PastLifeInfo } from "./PastLifeInfo";
 
 type TabKey = "past" | "rebirth";
 
@@ -227,8 +227,9 @@ export function PastLifeApp() {
         ※ 재미로 즐기는 콘텐츠이며 과학적 근거가 없습니다. 답변은 서버로 전송되지 않고
         브라우저에서만 계산됩니다.
       </p>
-
-      <PastLifeInfo />
+      <Link href="/guide" className="mt-2 text-center text-xs text-purple-300 hover:text-purple-200">
+        계산 방식 · 종족·직업 도감 · FAQ 보기 →
+      </Link>
     </div>
   );
 }

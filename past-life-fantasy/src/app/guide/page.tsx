@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "이용 가이드",
+  description: "전생 환생 진단의 계산 방식, 종족·직업 도감, 자주 묻는 질문을 안내합니다.",
+};
+
 const RACE_COMPENDIUM = [
   { name: "인간", desc: "어디서나 적응력이 뛰어난 만능형 종족" },
   { name: "오크", desc: "타고난 완력으로 전장을 압도하는 종족" },
@@ -55,10 +63,15 @@ const FAQ = [
   },
 ];
 
-export function PastLifeInfo() {
+export default function GuidePage() {
   return (
-    <div className="w-full">
-      <section className="pb-4">
+    <div className="mx-auto w-full max-w-md px-6 py-12">
+      <Link href="/" className="text-sm text-purple-300 hover:text-purple-200">
+        ← 진단으로 돌아가기
+      </Link>
+      <h1 className="font-heading text-gold mt-3 text-2xl">이용 가이드</h1>
+
+      <section className="mt-8">
         <h2 className="font-heading text-gold text-lg">이런 원리로 만들어져요</h2>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
           전생·환생 진단은 질문 8개에 대한 답변으로 힘·지혜·기민·친화 4가지 성향 점수를
@@ -69,7 +82,7 @@ export function PastLifeInfo() {
         </p>
       </section>
 
-      <section className="pb-4">
+      <section className="mt-8">
         <h2 className="font-heading text-gold text-lg">종족 도감</h2>
         <div className="mt-3 grid grid-cols-2 gap-2">
           {RACE_COMPENDIUM.map((race) => (
@@ -81,7 +94,7 @@ export function PastLifeInfo() {
         </div>
       </section>
 
-      <section className="pb-4">
+      <section className="mt-8">
         <h2 className="font-heading text-gold text-lg">직업 도감</h2>
         <div className="mt-3 grid grid-cols-2 gap-2">
           {CLASS_COMPENDIUM.map((cls) => (
@@ -93,7 +106,7 @@ export function PastLifeInfo() {
         </div>
       </section>
 
-      <section className="pb-4">
+      <section className="mt-8 pb-4">
         <h2 className="font-heading text-gold text-lg">자주 묻는 질문</h2>
         <div className="mt-3 flex flex-col gap-3">
           {FAQ.map((item) => (

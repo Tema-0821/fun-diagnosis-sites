@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { generateNickname, type NicknameResult } from "@/lib/nickname/generate";
@@ -124,6 +125,9 @@ export function NicknameApp() {
         ※ 재미로 즐기는 콘텐츠이며 과학적 근거가 없습니다. 입력한 이름은 서버로 전송되지 않고
         브라우저에서만 계산됩니다.
       </p>
+      <Link href="/guide" className="mt-2 text-center text-xs text-cyan-300 hover:text-cyan-200">
+        계산 방식 · FAQ 보기 →
+      </Link>
     </div>
   );
 }

@@ -21,7 +21,7 @@ const notoSans = Noto_Sans_KR({
   weight: ["400", "500", "700"],
 });
 
-const SITE_NAME = "궁합연구소";
+const SITE_NAME = "AI궁합";
 const SITE_URL = "https://ireum-gunghap.vercel.app";
 
 export const metadata: Metadata = {

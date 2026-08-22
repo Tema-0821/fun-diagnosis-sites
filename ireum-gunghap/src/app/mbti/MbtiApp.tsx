@@ -105,7 +105,7 @@ export function MbtiApp() {
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
       <Link href="/" className="text-sm text-violet-500 hover:text-violet-600">
-        ← 궁합연구소
+        ← AI궁합
       </Link>
       <h1 className="font-heading-mbti mt-3 text-center text-3xl tracking-tight text-zinc-900">
         🧠 MBTI 궁합
@@ -183,6 +183,9 @@ export function MbtiApp() {
         ※ 재미로 즐기는 콘텐츠이며 과학적 근거가 없습니다. 입력한 정보는 서버로 전송되지 않고
         브라우저에서만 계산됩니다.
       </p>
+      <Link href="/mbti/guide" className="mt-2 text-center text-xs text-violet-500 hover:text-violet-600">
+        계산 방식 · 유형표 · FAQ 보기 →
+      </Link>
     </div>
   );
 }

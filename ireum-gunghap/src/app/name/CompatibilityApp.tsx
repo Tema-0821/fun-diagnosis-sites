@@ -72,7 +72,7 @@ export function CompatibilityApp() {
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
       <Link href="/" className="text-sm text-rose-400 hover:text-rose-500">
-        ← 궁합연구소
+        ← AI궁합
       </Link>
       <h1 className="font-heading-name mt-3 text-center text-4xl font-bold tracking-tight text-rose-500">
         💕 이름궁합
@@ -165,6 +165,9 @@ export function CompatibilityApp() {
         ※ 재미로 즐기는 콘텐츠이며 과학적 근거가 없습니다. 입력한 이름은 서버로 전송되지 않고
         브라우저에서만 계산됩니다.
       </p>
+      <Link href="/name/guide" className="mt-2 text-center text-xs text-rose-400 hover:text-rose-500">
+        계산 방식 · 등급표 · FAQ 보기 →
+      </Link>
     </div>
   );
 }
