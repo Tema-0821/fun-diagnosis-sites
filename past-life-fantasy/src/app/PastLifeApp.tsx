@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CharacterPortrait } from "@/components/CharacterPortrait";
 import {
   buildArchetype,
   decodeAnswers,
@@ -197,8 +196,6 @@ export function PastLifeApp() {
       ) : (
         <div className="card-tarot animate-card-reveal mt-6 w-full rounded-xl p-6 text-center">
           <p className="text-xs tracking-[0.2em] text-purple-300 uppercase">{config.title}</p>
-
-          <CharacterPortrait race={result.race} classInfo={result.classInfo} />
 
           <p className="mt-3 text-sm text-zinc-400">{config.resultLabel}</p>
           <p className="font-heading text-gold mt-1 text-xl">{result.name}</p>
