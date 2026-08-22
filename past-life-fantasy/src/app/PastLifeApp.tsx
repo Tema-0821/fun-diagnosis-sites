@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -8,6 +9,7 @@ import {
   decodeAnswers,
   encodeAnswers,
   type CombinedArchetype,
+  type Gender,
   type QuizQuestion,
   type Tag,
 } from "@/lib/pastlife/archetype";
@@ -53,13 +55,16 @@ export function PastLifeApp() {
   const rebirthQuiz = useQuizState(REBIRTH_QUESTIONS);
   const [pastResult, setPastResult] = useState<CombinedArchetype | null>(null);
   const [rebirthResult, setRebirthResult] = useState<CombinedArchetype | null>(null);
+  const [gender, setGender] = useState<Gender | null>(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    // 공유된 링크(?tab=past|rebirth&a=코드)로 들어왔을 때 URL이라는 외부 상태를 초기 렌더
+    // 공유된 링크(?tab=past|rebirth&a=코드&g=m|f)로 들어왔을 때 URL이라는 외부 상태를 초기 렌더
     // 상태로 동기화하는 것이라 정당한 케이스.
     const tabParam = searchParams.get("tab");
     const code = searchParams.get("a");
+    const genderParam = searchParams.get("g");
+    const decodedGender: Gender = genderParam === "f" ? "female" : "male";
     if (code && (tabParam === "past" || tabParam === "rebirth")) {
       const questions = tabParam === "past" ? PAST_QUESTIONS : REBIRTH_QUESTIONS;
       const decoded = decodeAnswers(questions, code);
@@ -68,6 +73,7 @@ export function PastLifeApp() {
         const result = buildArchetype(questions, decoded, templates);
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setTab(tabParam);
+        setGender(decodedGender);
         if (tabParam === "past") {
           pastQuiz.setAnswers(decoded);
           setPastResult(result);
@@ -87,11 +93,15 @@ export function PastLifeApp() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!gender) return;
     const next = buildArchetype(config.questions, quiz.answers, config.templates);
     if (!next) return;
     setResult(next);
     setCopied(false);
-    router.replace(`/?tab=${tab}&a=${encodeAnswers(config.questions, quiz.answers)}`);
+    const genderCode = gender === "female" ? "f" : "m";
+    router.replace(
+      `/?tab=${tab}&a=${encodeAnswers(config.questions, quiz.answers)}&g=${genderCode}`,
+    );
   }
 
   function handleReset() {
@@ -150,8 +160,43 @@ export function PastLifeApp() {
           <div className="mb-6 h-1 w-full rounded-full bg-white/10">
             <div
               className="h-1 rounded-full bg-gradient-to-r from-purple-400 to-yellow-400 transition-all"
-              style={{ width: `${(quiz.answeredCount / config.questions.length) * 100}%` }}
+              style={{
+                width: `${((quiz.answeredCount + (gender ? 1 : 0)) / (config.questions.length + 1)) * 100}%`,
+              }}
             />
+          </div>
+
+          <div className="border-t border-purple-500/20 py-5 first:border-t-0 first:pt-0">
+            <p className="text-sm text-zinc-200">
+              <span className="text-gold mr-2">•</span>
+              결과 이미지에 사용할 성별을 골라주세요
+            </p>
+            <div className="mt-3 flex gap-2">
+              {(
+                [
+                  { value: "male", label: "남성" },
+                  { value: "female", label: "여성" },
+                ] as const
+              ).map((option) => (
+                <label
+                  key={option.value}
+                  className={`flex-1 cursor-pointer rounded-lg border px-3 py-2 text-center text-sm transition-colors ${
+                    gender === option.value
+                      ? "border-yellow-400/70 bg-yellow-500/10 text-yellow-200"
+                      : "border-white/10 text-zinc-400 hover:border-white/20 hover:text-zinc-200"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="gender"
+                    className="sr-only"
+                    checked={gender === option.value}
+                    onChange={() => setGender(option.value)}
+                  />
+                  {option.label}
+                </label>
+              ))}
+            </div>
           </div>
 
           {config.questions.map((q, index) => (
@@ -188,7 +233,7 @@ export function PastLifeApp() {
 
           <button
             type="submit"
-            disabled={!quiz.allAnswered}
+            disabled={!quiz.allAnswered || !gender}
             className="font-heading mt-8 w-full rounded-lg border border-yellow-400/60 bg-gradient-to-r from-purple-900/60 to-indigo-900/60 px-4 py-3 text-lg text-yellow-200 shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100"
           >
             {config.submitLabel}
@@ -197,6 +242,17 @@ export function PastLifeApp() {
       ) : (
         <div className="card-tarot animate-card-reveal mt-6 w-full rounded-xl p-6 text-center">
           <p className="text-xs tracking-[0.2em] text-purple-300 uppercase">{config.title}</p>
+
+          <div className="mx-auto mt-3 h-36 w-36 overflow-hidden rounded-full border border-yellow-400/40 shadow-[0_0_24px_rgba(212,175,55,0.35)]">
+            <Image
+              src={`/portraits/${result.race.imageKey}_${gender === "female" ? "f" : "m"}.webp`}
+              alt={result.name}
+              width={144}
+              height={144}
+              priority
+              className="h-full w-full object-cover"
+            />
+          </div>
 
           <p className="mt-3 text-sm text-zinc-400">{config.resultLabel}</p>
           <p className="font-heading text-gold mt-1 text-xl">{result.name}</p>

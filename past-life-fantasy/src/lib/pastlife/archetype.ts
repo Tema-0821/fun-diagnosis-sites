@@ -2,6 +2,7 @@ import { djb2Hash, mulberry32 } from "./seed";
 import { CLASS_BY_TAG, RACE_BY_TAG, type ClassInfo, type RaceInfo } from "./pools";
 
 export type Tag = "power" | "wisdom" | "cunning" | "charm";
+export type Gender = "male" | "female";
 
 export interface QuizOption {
   label: string;

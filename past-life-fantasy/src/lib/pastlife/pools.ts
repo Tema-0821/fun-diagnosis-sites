@@ -4,6 +4,7 @@ export interface RaceInfo {
   name: string;
   skin: string; // 피부/모피 톤
   feature: "pointedEars" | "horns" | "tusks" | "beard" | "animalEars" | "roundEars" | "scales";
+  imageKey: string; // public/portraits/{imageKey}_{gender}.webp
 }
 
 export interface ClassInfo {
@@ -15,28 +16,27 @@ export interface ClassInfo {
 // 종족은 2차 태그(secondary)로, 직업은 1차 태그(primary)로 결정된다.
 export const RACE_BY_TAG: Record<Tag, readonly RaceInfo[]> = {
   power: [
-    { name: "인간", skin: "#f0c9a0", feature: "roundEars" },
-    { name: "오크", skin: "#7fa86b", feature: "tusks" },
-    { name: "드워프", skin: "#e0ab7c", feature: "beard" },
-    { name: "거인족", skin: "#c9a97e", feature: "roundEars" },
+    { name: "인간", skin: "#f0c9a0", feature: "roundEars", imageKey: "human" },
+    { name: "오크", skin: "#7fa86b", feature: "tusks", imageKey: "orc" },
+    { name: "드워프", skin: "#e0ab7c", feature: "beard", imageKey: "dwarf" },
   ],
   wisdom: [
-    { name: "엘프", skin: "#f3d9b8", feature: "pointedEars" },
-    { name: "하이엘프", skin: "#f7e6d0", feature: "pointedEars" },
-    { name: "마족", skin: "#c98bd6", feature: "horns" },
-    { name: "정령족", skin: "#9fd8e0", feature: "pointedEars" },
+    { name: "엘프", skin: "#f3d9b8", feature: "pointedEars", imageKey: "elf" },
+    { name: "하이엘프", skin: "#f7e6d0", feature: "pointedEars", imageKey: "highelf" },
+    { name: "마족", skin: "#c98bd6", feature: "horns", imageKey: "demonkin" },
+    { name: "정령족", skin: "#9fd8e0", feature: "pointedEars", imageKey: "spirit" },
   ],
   cunning: [
-    { name: "고블린", skin: "#8fb56a", feature: "tusks" },
-    { name: "하플링", skin: "#e8bd8f", feature: "roundEars" },
-    { name: "다크엘프", skin: "#9a7bc9", feature: "pointedEars" },
-    { name: "수인", skin: "#c8956a", feature: "animalEars" },
+    { name: "고블린", skin: "#8fb56a", feature: "tusks", imageKey: "goblin" },
+    { name: "하플링", skin: "#e8bd8f", feature: "roundEars", imageKey: "halfling" },
+    { name: "다크엘프", skin: "#9a7bc9", feature: "pointedEars", imageKey: "darkelf" },
+    { name: "수인", skin: "#c8956a", feature: "animalEars", imageKey: "beastkin" },
   ],
   charm: [
-    { name: "하프엘프", skin: "#f2d3ae", feature: "pointedEars" },
-    { name: "요정", skin: "#f7cbe0", feature: "pointedEars" },
-    { name: "천사족", skin: "#fdf0d5", feature: "roundEars" },
-    { name: "용족", skin: "#e3a35c", feature: "scales" },
+    { name: "하프엘프", skin: "#f2d3ae", feature: "pointedEars", imageKey: "halfelf" },
+    { name: "요정", skin: "#f7cbe0", feature: "pointedEars", imageKey: "fairy" },
+    { name: "천사족", skin: "#fdf0d5", feature: "roundEars", imageKey: "angel" },
+    { name: "용족", skin: "#e3a35c", feature: "scales", imageKey: "dragon" },
   ],
 };
 
