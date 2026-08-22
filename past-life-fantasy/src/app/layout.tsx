@@ -20,10 +20,11 @@ const SITE_URL = "https://past-life-fantasy.vercel.app";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: `${SITE_NAME}`, template: `%s | ${SITE_NAME}` },
-  description: "성향 질문 6개로 알아보는 나의 전생 판타지 세계관과 환생 후 운명을 재미로 확인해봐요.",
+  description:
+    "성향 질문으로 알아보는 판타지 세계관 속 나의 전생과 다음 생. 엘프, 고블린, 드워프 등 50가지 넘는 종족·직업 조합 중 나의 결과는? 재미로 확인해봐요.",
   openGraph: {
     title: SITE_NAME,
-    description: "성향 질문 6개로 알아보는 나의 전생과 환생 후 운명.",
+    description: "성향 질문으로 알아보는 판타지 세계관 속 나의 전생과 다음 생.",
     siteName: SITE_NAME,
     locale: "ko_KR",
     type: "website",
