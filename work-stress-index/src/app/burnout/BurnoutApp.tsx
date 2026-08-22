@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SiteNav } from "@/components/SiteNav";
-import { calculateStress, type StressResult } from "@/lib/stress/calculate";
-import { QUESTIONS } from "@/lib/stress/questions";
-import { decodeAnswers, encodeAnswers } from "@/lib/stress/share";
+import { calculateBurnout, type BurnoutResult } from "@/lib/burnout/calculate";
+import { QUESTIONS } from "@/lib/burnout/questions";
+import { decodeAnswers, encodeAnswers } from "@/lib/burnout/share";
 
 function scoreColor(score: number): string {
   if (score >= 61) return "text-red-500";
@@ -19,10 +19,9 @@ function scoreStroke(score: number): string {
   return "#10b981";
 }
 
-// 반원형 게이지: 둘레 길이(半 pi r, r=80)만큼 dasharray를 잡고 점수 비율만큼만 보이게 offset을 준다.
 const GAUGE_CIRCUMFERENCE = Math.PI * 80;
 
-function StressGauge({ score }: { score: number }) {
+function BurnoutGauge({ score }: { score: number }) {
   const offset = GAUGE_CIRCUMFERENCE * (1 - score / 100);
   return (
     <svg viewBox="0 0 200 110" className="mx-auto w-56">
@@ -49,12 +48,12 @@ function StressGauge({ score }: { score: number }) {
   );
 }
 
-export function StressApp() {
+export function BurnoutApp() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const [answers, setAnswers] = useState<Record<string, number>>({});
-  const [result, setResult] = useState<StressResult | null>(null);
+  const [result, setResult] = useState<BurnoutResult | null>(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -66,7 +65,7 @@ export function StressApp() {
       if (decoded) {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setAnswers(decoded);
-        setResult(calculateStress(decoded));
+        setResult(calculateBurnout(decoded));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,18 +76,18 @@ export function StressApp() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const next = calculateStress(answers);
+    const next = calculateBurnout(answers);
     if (!next) return;
     setResult(next);
     setCopied(false);
-    router.replace(`/?a=${encodeAnswers(answers)}`);
+    router.replace(`/burnout?a=${encodeAnswers(answers)}`);
   }
 
   function handleReset() {
     setResult(null);
     setAnswers({});
     setCopied(false);
-    router.replace("/");
+    router.replace("/burnout");
   }
 
   async function handleShare() {
@@ -103,19 +102,19 @@ export function StressApp() {
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
-      <p className="text-xs tracking-[0.3em] text-zinc-400 uppercase">Weekly Diagnosis</p>
+      <p className="text-xs tracking-[0.3em] text-zinc-400 uppercase">Burnout Check</p>
       <h1 className="font-heading mt-2 text-center text-3xl font-bold tracking-tight text-zinc-900">
-        😮‍💨 직장 스트레스 지수
+        🕯️ 번아웃 자가진단
       </h1>
       <div className="rule-double mt-4 w-16" />
       <p className="mt-4 text-center text-sm text-zinc-500">
-        질문 {QUESTIONS.length}개에 답하면 지금 나의 스트레스 지수를 확인할 수 있어요
+        질문 {QUESTIONS.length}개에 답하면 지금 나의 번아웃 정도를 확인할 수 있어요
       </p>
 
-      <SiteNav active="/" />
+      <SiteNav active="/burnout" />
 
       {!result ? (
-        <form onSubmit={handleSubmit} className="mt-8 flex w-full flex-col">
+        <form onSubmit={handleSubmit} className="mt-6 flex w-full flex-col">
           <div className="mb-6 h-1 w-full rounded-full bg-[#e7ddc9]">
             <div
               className="h-1 rounded-full bg-orange-400 transition-all"
@@ -166,7 +165,7 @@ export function StressApp() {
       ) : (
         <div className="animate-pop-in mt-8 w-full border border-[#e7ddc9] bg-white/60 p-6 text-center">
           <p className="text-xs tracking-[0.2em] text-zinc-400 uppercase">Result</p>
-          <StressGauge score={result.scorePercent} />
+          <BurnoutGauge score={result.scorePercent} />
           <p className={`font-heading text-xl font-bold ${scoreColor(result.scorePercent)}`}>
             {result.band.title}
           </p>
