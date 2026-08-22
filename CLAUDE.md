@@ -8,15 +8,33 @@
 
 | 폴더 | 사이트 | 상태 |
 |---|---|---|
-| `ireum-gunghap/` | 이름궁합 — 이름 두 개로 궁합 진단 | 완료 (로컬 검증 완료, 배포 전) |
-| `mbti-gunghap/` | MBTI 궁합 진단 | 완료 (로컬 검증 완료, 배포 전) |
-| `nickname-diagnosis/` | 별명(닉네임) 진단 | 완료 (로컬 검증 완료, 배포 전) |
-| `work-stress-index/` | 직장 스트레스 지수 진단 | 완료 (로컬 검증 완료, 배포 전) |
-| `past-life-fantasy/` | 전생/환생 판타지 진단 | 완료 (로컬 검증 완료, 배포 전) |
+| `ireum-gunghap/` | **궁합연구소** — 이름궁합(`/name`) + MBTI궁합(`/mbti`) 통합 사이트 | 완료 |
+| `nickname-diagnosis/` | 별명(닉네임) 진단 — 결과 이모지 뱃지 + 애드센스 대비 콘텐츠 보강 | 완료 |
+| `work-stress-index/` | 직장 스트레스 지수 진단 | 완료 |
+| `past-life-fantasy/` | 전생/환생 판타지 진단 — 성향 퀴즈 기반, 전생/환생 결과 분리 | 완료 |
 
-5개 사이트 모두 `npm run lint` / `npm run test` / `npm run build` 통과, 프로덕션 서버 기동 후
-브라우저로 메인 플로우·공유 링크 재현·모바일 뷰포트(375px)·콘솔 에러 없음까지 확인 완료.
-아직 GitHub 저장소 생성·git init·Vercel 연결은 하지 않았다 — 사용자가 저장소를 만들면 다음 단계로 진행.
+**2026-08-22 개편** (애드센스 콘텐츠 빈약 반려 위험 + 사용자 피드백 3건 반영):
+
+1. **궁합 시리즈 병합**: `이름궁합`과 `mbti-gunghap`을 별도 사이트로 배포했으나 "궁합 시리즈는
+   하나로 합쳐야" 요청에 따라 `ireum-gunghap/` 폴더 하나로 병합. `mbti-gunghap/` 폴더는 삭제됨 —
+   해당 Vercel 프로젝트도 사용자가 수동으로 삭제 필요. 루트(`/`)는 두 진단 중 고르는 랜딩 페이지,
+   `/name`과 `/mbti`가 각자의 테마(로맨틱 티켓 vs 플랫 컬러블록)를 유지한 채 서브 라우트로 존재.
+   `src/lib/nameCompat/`와 `src/lib/mbtiCompat/`로 로직 네임스페이스 분리, 폰트도
+   `--font-heading-name`(Gaegu)/`--font-heading-mbti`(Jua) 두 개를 공존시킴. 결과 카드에는
+   `src/components/CompatibilityVenn.tsx`(점수에 따라 겹침 정도가 달라지는 벤 다이어그램 SVG)를
+   공통 재사용.
+2. **전생환생 전면 재설계**: "이름 입력 대신 성향 퀴즈로, 전생과 환생은 하나로 섞지 말고 분리"
+   요청에 따라 이름 기반 시드 생성을 6문항 성향 퀴즈(4원소: 불/물/바람/대지)로 교체.
+   `src/lib/pastlife/quiz.ts`(문항) → `generate.ts`(원소별 점수 집계, 1위=전생/2위=환생 결정) →
+   `elements.ts`(원소별 전생 서사·환생 운명 텍스트). 결과는 "PAST LIFE"/"REBIRTH" 두 카드로 완전히
+   분리해서 표시, 각 카드에 `src/components/ElementIcon.tsx`(원소별 커스텀 SVG 이모지 아이콘)
+   표시. 공유는 6자리 숫자코드(`share.ts`)로 URL 인코딩.
+3. **별명진단기 콘텐츠 보강**: 홈페이지에 "이런 원리로 만들어져요" 설명 섹션 + FAQ 4문항 추가(office-calc-hub의 AdSense 재승인 성공 패턴 재사용). 결과 카드에는 명사 파트와 매칭되는
+   이모지 뱃지(`src/lib/nickname/nounEmoji.ts`, 18개 명사 각각에 이모지 매핑) 추가.
+
+4개 사이트 모두 `npm run lint` / `npm run test` / `npm run build` 통과, 브라우저로 메인 플로우·
+공유 링크 재현·모바일 뷰포트(375px)·콘솔 에러 없음까지 확인 완료. 아직 커밋만 했고 push는
+사용자 확인 후 진행 예정.
 
 ## 공통 원칙
 

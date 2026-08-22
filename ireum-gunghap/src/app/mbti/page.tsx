@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { MbtiApp } from "./MbtiApp";
 
-export default function Home() {
+export default function MbtiPage() {
   return (
     <Suspense fallback={null}>
       <MbtiApp />

@@ -4,6 +4,7 @@ import { ADJECTIVE_POOL, DESCRIPTION_POOL, NOUN_POOL, TRAIT_POOL } from "./pools
 export interface NicknameResult {
   name: string;
   nickname: string;
+  noun: string;
   description: string;
   traits: readonly [string, string, string];
 }
@@ -38,6 +39,7 @@ export function generateNickname(rawName: string): NicknameResult | null {
   return {
     name,
     nickname: `${adjective} ${noun}`,
+    noun,
     description,
     traits,
   };

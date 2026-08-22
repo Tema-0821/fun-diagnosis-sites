@@ -6,6 +6,7 @@ export interface MbtiTypeStyle {
   ring: string;
   text: string;
   label: string;
+  hex: string;
 }
 
 // 16Personalities의 4개 그룹 색상 코딩을 참고: 분석가(보라)/외교관(초록)/관리자(파랑)/탐험가(노랑).
@@ -15,6 +16,7 @@ const NT: MbtiTypeStyle = {
   ring: "ring-violet-400",
   text: "text-violet-600",
   label: "분석가",
+  hex: "#8b5cf6",
 };
 const NF: MbtiTypeStyle = {
   bg: "bg-emerald-100 text-emerald-700",
@@ -22,6 +24,7 @@ const NF: MbtiTypeStyle = {
   ring: "ring-emerald-400",
   text: "text-emerald-600",
   label: "외교관",
+  hex: "#10b981",
 };
 const SJ: MbtiTypeStyle = {
   bg: "bg-blue-100 text-blue-700",
@@ -29,6 +32,7 @@ const SJ: MbtiTypeStyle = {
   ring: "ring-blue-400",
   text: "text-blue-600",
   label: "관리자",
+  hex: "#3b82f6",
 };
 const SP: MbtiTypeStyle = {
   bg: "bg-amber-100 text-amber-700",
@@ -36,6 +40,7 @@ const SP: MbtiTypeStyle = {
   ring: "ring-amber-400",
   text: "text-amber-600",
   label: "탐험가",
+  hex: "#f59e0b",
 };
 
 export const MBTI_STYLE: Record<MbtiType, MbtiTypeStyle> = {

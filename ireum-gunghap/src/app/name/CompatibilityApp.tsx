@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { generateCompatibility, type CompatibilityResult } from "@/lib/compatibility/generate";
+import { generateCompatibility, type CompatibilityResult } from "@/lib/nameCompat/generate";
 
 function scoreColor(score: number): string {
   if (score >= 70) return "text-rose-500";
@@ -45,7 +46,9 @@ export function CompatibilityApp() {
     if (!next) return;
     setResult(next);
     setCopied(false);
-    router.replace(`/?a=${encodeURIComponent(nameA.trim())}&b=${encodeURIComponent(nameB.trim())}`);
+    router.replace(
+      `/name?a=${encodeURIComponent(nameA.trim())}&b=${encodeURIComponent(nameB.trim())}`,
+    );
   }
 
   function handleReset() {
@@ -53,7 +56,7 @@ export function CompatibilityApp() {
     setNameA("");
     setNameB("");
     setCopied(false);
-    router.replace("/");
+    router.replace("/name");
   }
 
   async function handleShare() {
@@ -68,7 +71,10 @@ export function CompatibilityApp() {
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
-      <h1 className="font-heading text-center text-4xl font-bold tracking-tight text-rose-500">
+      <Link href="/" className="text-sm text-rose-400 hover:text-rose-500">
+        ← 궁합연구소
+      </Link>
+      <h1 className="font-heading-name mt-3 text-center text-4xl font-bold tracking-tight text-rose-500">
         💕 이름궁합
       </h1>
       <p className="mt-2 text-center text-sm text-zinc-500">
@@ -96,7 +102,7 @@ export function CompatibilityApp() {
           />
           <button
             type="submit"
-            className="font-heading mt-2 w-full rounded-full bg-gradient-to-r from-rose-400 to-violet-400 px-4 py-3 text-lg font-bold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            className="font-heading-name mt-2 w-full rounded-full bg-gradient-to-r from-rose-400 to-violet-400 px-4 py-3 text-lg font-bold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
           >
             궁합 보기 ✨
           </button>
@@ -104,7 +110,7 @@ export function CompatibilityApp() {
       ) : (
         <div className="animate-pop-in mt-8 w-full rounded-3xl border border-rose-100 bg-white/90 shadow-lg">
           <div className="px-6 pt-6 pb-4 text-center">
-            <p className="font-heading text-lg text-zinc-600">
+            <p className="font-heading-name text-lg text-zinc-600">
               {result.nameA} <span className="text-rose-400">×</span> {result.nameB}
             </p>
 
@@ -122,7 +128,7 @@ export function CompatibilityApp() {
               </div>
             </div>
 
-            <p className="font-heading mt-3 text-xl font-bold text-zinc-800">
+            <p className="font-heading-name mt-3 text-xl font-bold text-zinc-800">
               {result.gradeTitle}
             </p>
           </div>

@@ -20,10 +20,10 @@ const SITE_URL = "https://past-life-fantasy.vercel.app";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: `${SITE_NAME}`, template: `%s | ${SITE_NAME}` },
-  description: "이름 하나로 알아보는 나의 전생 판타지 세계관과 환생 후 운명을 재미로 확인해봐요.",
+  description: "성향 질문 6개로 알아보는 나의 전생 판타지 세계관과 환생 후 운명을 재미로 확인해봐요.",
   openGraph: {
     title: SITE_NAME,
-    description: "이름 하나로 알아보는 나의 전생 판타지 세계관과 환생 후 운명.",
+    description: "성향 질문 6개로 알아보는 나의 전생과 환생 후 운명.",
     siteName: SITE_NAME,
     locale: "ko_KR",
     type: "website",

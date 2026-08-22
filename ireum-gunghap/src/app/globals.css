@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-heading: var(--font-heading);
+  --font-heading-name: var(--font-heading-name);
+  --font-heading-mbti: var(--font-heading-mbti);
   --font-body: var(--font-body);
 }
 
@@ -9,28 +10,17 @@ body {
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
 }
 
-.font-heading {
-  font-family: var(--font-heading), var(--font-body), sans-serif;
+.font-heading-name {
+  font-family: var(--font-heading-name), var(--font-body), sans-serif;
+}
+
+.font-heading-mbti {
+  font-family: var(--font-heading-mbti), var(--font-body), sans-serif;
 }
 
 .bg-love-pattern {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Ctext x='6' y='40' font-size='26' fill='rgba(244,63,94,0.09)'%3E%E2%99%A5%3C/text%3E%3Ctext x='38' y='16' font-size='16' fill='rgba(167,139,250,0.10)'%3E%E2%99%A5%3C/text%3E%3C/svg%3E");
   background-repeat: repeat;
-}
-
-@keyframes pop-in {
-  0% {
-    opacity: 0;
-    transform: scale(0.9) translateY(10px) rotate(-1deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0) rotate(0deg);
-  }
-}
-
-.animate-pop-in {
-  animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* 티켓 스텁 느낌을 주는 반원 노치 — 카드 좌우 가장자리를 파낸다 */
@@ -57,4 +47,19 @@ body {
 
 .ticket-notch::after {
   right: -12px;
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px) rotate(-1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotate(0deg);
+  }
+}
+
+.animate-pop-in {
+  animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

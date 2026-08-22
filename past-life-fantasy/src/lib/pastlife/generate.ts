@@ -1,54 +1,34 @@
-import { djb2Hash, mulberry32, pick } from "./seed";
-import {
-  ABILITY_POOL,
-  DESCRIPTION_POOL,
-  getGradeBand,
-  REBIRTH_POOL,
-  ROLE_POOL,
-} from "./pools";
+import { ELEMENTS } from "./elements";
+import { QUIZ_QUESTIONS, type Element } from "./quiz";
 
 export interface PastLifeResult {
-  name: string;
-  role: string;
-  legendScore: number;
-  gradeTitle: string;
-  description: string;
-  abilities: readonly [string, string, string];
-  rebirth: string;
+  primaryElement: Element;
+  secondaryElement: Element;
+  pastLife: { role: string; description: string };
+  rebirth: { title: string; description: string };
 }
 
-function cleanName(name: string): string {
-  return name.trim().replace(/\s+/g, "");
-}
+const ELEMENT_ORDER: readonly Element[] = ["fire", "water", "wind", "earth"];
 
-function fillTemplate(template: string, name: string): string {
-  return template.replaceAll("{name}", name);
-}
-
-// 배열에서 중복 없이 n개를 시드 순서대로 골라 반환한다.
-function pickUnique<T>(items: readonly T[], count: number, rng: () => number): T[] {
-  const pool = [...items];
-  const result: T[] = [];
-  for (let i = 0; i < count && pool.length > 0; i++) {
-    const index = Math.floor(rng() * pool.length);
-    result.push(pool.splice(Math.min(index, pool.length - 1), 1)[0]);
+export function scoreElements(answers: Record<string, Element>): Element[] {
+  const counts: Record<Element, number> = { fire: 0, water: 0, wind: 0, earth: 0 };
+  for (const question of QUIZ_QUESTIONS) {
+    const element = answers[question.id];
+    if (element) counts[element] += 1;
   }
-  return result;
+  return [...ELEMENT_ORDER].sort((a, b) => counts[b] - counts[a]);
 }
 
-export function generatePastLife(rawName: string): PastLifeResult | null {
-  const name = cleanName(rawName);
-  if (!name) return null;
+export function generatePastLife(answers: Record<string, Element>): PastLifeResult | null {
+  const hasAllAnswers = QUIZ_QUESTIONS.every((q) => Boolean(answers[q.id]));
+  if (!hasAllAnswers) return null;
 
-  const seed = djb2Hash(name);
-  const rng = mulberry32(seed);
+  const [primaryElement, secondaryElement] = scoreElements(answers);
 
-  const legendScore = Math.round(rng() * 50 + rng() * 50);
-  const gradeTitle = pick(getGradeBand(legendScore).titles, rng);
-  const role = pick(ROLE_POOL, rng);
-  const description = fillTemplate(pick(DESCRIPTION_POOL, rng), name);
-  const abilities = pickUnique(ABILITY_POOL, 3, rng) as [string, string, string];
-  const rebirth = fillTemplate(pick(REBIRTH_POOL, rng), name);
-
-  return { name, role, legendScore, gradeTitle, description, abilities, rebirth };
+  return {
+    primaryElement,
+    secondaryElement,
+    pastLife: ELEMENTS[primaryElement].pastLife,
+    rebirth: ELEMENTS[secondaryElement].rebirth,
+  };
 }

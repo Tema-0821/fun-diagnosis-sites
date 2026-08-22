@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { generateNickname, type NicknameResult } from "@/lib/nickname/generate";
+import { NOUN_EMOJI } from "@/lib/nickname/nounEmoji";
 
 export function NicknameApp() {
   const router = useRouter();
@@ -78,7 +79,13 @@ export function NicknameApp() {
         </form>
       ) : (
         <div className="animate-pop-in card-neon mt-8 w-full rounded-lg p-6 text-center">
-          <p className="text-sm text-zinc-400">{result.name}님의 별명은</p>
+          <div
+            className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-2 border-fuchsia-400/60 bg-fuchsia-500/10 text-5xl shadow-[0_0_20px_rgba(217,70,239,0.4)]"
+            aria-hidden
+          >
+            {NOUN_EMOJI[result.noun] ?? "✨"}
+          </div>
+          <p className="mt-3 text-sm text-zinc-400">{result.name}님의 별명은</p>
           <p className="font-heading text-neon-pink mt-2 text-2xl">{result.nickname}</p>
 
           <p className="mt-4 text-sm leading-relaxed text-zinc-300">{result.description}</p>
