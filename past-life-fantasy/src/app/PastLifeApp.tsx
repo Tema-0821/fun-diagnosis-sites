@@ -7,12 +7,12 @@ import {
   buildArchetype,
   decodeAnswers,
   encodeAnswers,
-  type ArchetypeResult,
+  type CombinedArchetype,
   type QuizQuestion,
   type Tag,
 } from "@/lib/pastlife/archetype";
-import { PAST_QUESTIONS, PAST_RARE, PAST_TEMPLATES } from "@/lib/pastlife/pastQuiz";
-import { REBIRTH_QUESTIONS, REBIRTH_RARE, REBIRTH_TEMPLATES } from "@/lib/pastlife/rebirthQuiz";
+import { PAST_QUESTIONS, PAST_TEMPLATES } from "@/lib/pastlife/pastQuiz";
+import { REBIRTH_QUESTIONS, REBIRTH_TEMPLATES } from "@/lib/pastlife/rebirthQuiz";
 
 type TabKey = "past" | "rebirth";
 
@@ -20,20 +20,18 @@ const TAB_CONFIG = {
   past: {
     label: "🕰️ 전생 진단",
     title: "전생 진단",
-    subtitle: "질문 6개로 알아보는 나의 전생",
+    subtitle: `질문 ${PAST_QUESTIONS.length}개로 알아보는 나의 전생`,
     questions: PAST_QUESTIONS,
     templates: PAST_TEMPLATES,
-    rare: PAST_RARE,
     submitLabel: "전생 확인하기 🔮",
     resultLabel: "나의 전생은...",
   },
   rebirth: {
     label: "✨ 환생 진단",
     title: "환생 진단",
-    subtitle: "질문 6개로 알아보는 다음 생의 나",
+    subtitle: `질문 ${REBIRTH_QUESTIONS.length}개로 알아보는 다음 생의 나`,
     questions: REBIRTH_QUESTIONS,
     templates: REBIRTH_TEMPLATES,
-    rare: REBIRTH_RARE,
     submitLabel: "다음 생 확인하기 🔮",
     resultLabel: "다음 생의 나는...",
   },
@@ -53,8 +51,8 @@ export function PastLifeApp() {
   const [tab, setTab] = useState<TabKey>("past");
   const pastQuiz = useQuizState(PAST_QUESTIONS);
   const rebirthQuiz = useQuizState(REBIRTH_QUESTIONS);
-  const [pastResult, setPastResult] = useState<ArchetypeResult | null>(null);
-  const [rebirthResult, setRebirthResult] = useState<ArchetypeResult | null>(null);
+  const [pastResult, setPastResult] = useState<CombinedArchetype | null>(null);
+  const [rebirthResult, setRebirthResult] = useState<CombinedArchetype | null>(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -67,8 +65,7 @@ export function PastLifeApp() {
       const decoded = decodeAnswers(questions, code);
       if (decoded) {
         const templates = tabParam === "past" ? PAST_TEMPLATES : REBIRTH_TEMPLATES;
-        const rare = tabParam === "past" ? PAST_RARE : REBIRTH_RARE;
-        const result = buildArchetype(questions, decoded, templates, rare);
+        const result = buildArchetype(questions, decoded, templates);
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setTab(tabParam);
         if (tabParam === "past") {
@@ -90,7 +87,7 @@ export function PastLifeApp() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const next = buildArchetype(config.questions, quiz.answers, config.templates, config.rare);
+    const next = buildArchetype(config.questions, quiz.answers, config.templates);
     if (!next) return;
     setResult(next);
     setCopied(false);
@@ -201,20 +198,7 @@ export function PastLifeApp() {
         <div className="card-tarot animate-card-reveal mt-6 w-full rounded-xl p-6 text-center">
           <p className="text-xs tracking-[0.2em] text-purple-300 uppercase">{config.title}</p>
 
-          {result.isRare ? (
-            <div
-              className="mx-auto mt-2 flex h-32 w-32 items-center justify-center rounded-full border text-6xl"
-              style={{
-                borderColor: `${result.color}66`,
-                background: `radial-gradient(circle, ${result.color}33, transparent 70%)`,
-                boxShadow: `0 0 30px ${result.color}66`,
-              }}
-            >
-              {result.emoji}
-            </div>
-          ) : (
-            <CharacterPortrait race={result.race} classInfo={result.classInfo} />
-          )}
+          <CharacterPortrait race={result.race} classInfo={result.classInfo} />
 
           <p className="mt-3 text-sm text-zinc-400">{config.resultLabel}</p>
           <p className="font-heading text-gold mt-1 text-xl">{result.name}</p>

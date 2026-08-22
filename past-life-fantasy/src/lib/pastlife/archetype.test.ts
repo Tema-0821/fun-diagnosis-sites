@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildArchetype, decodeAnswers, encodeAnswers, type Tag } from "./archetype";
-import { PAST_QUESTIONS, PAST_RARE, PAST_TEMPLATES } from "./pastQuiz";
-import { REBIRTH_QUESTIONS, REBIRTH_RARE, REBIRTH_TEMPLATES } from "./rebirthQuiz";
+import { PAST_QUESTIONS, PAST_TEMPLATES } from "./pastQuiz";
+import { REBIRTH_QUESTIONS, REBIRTH_TEMPLATES } from "./rebirthQuiz";
 import { mulberry32 } from "./seed";
 
 function answersOf(questions: typeof PAST_QUESTIONS, ...tags: Tag[]): Record<string, Tag> {
@@ -12,7 +12,7 @@ function answersOf(questions: typeof PAST_QUESTIONS, ...tags: Tag[]): Record<str
 
 describe("buildArchetype (past)", () => {
   it("모든 질문에 답하지 않으면 null을 반환한다", () => {
-    expect(buildArchetype(PAST_QUESTIONS, {}, PAST_TEMPLATES, PAST_RARE)).toBeNull();
+    expect(buildArchetype(PAST_QUESTIONS, {}, PAST_TEMPLATES)).toBeNull();
   });
 
   it("같은 답변이면 항상 같은 결과가 나온다", () => {
@@ -24,17 +24,30 @@ describe("buildArchetype (past)", () => {
       "wisdom",
       "wisdom",
       "cunning",
+      "power",
+      "wisdom",
     );
-    const a = buildArchetype(PAST_QUESTIONS, answers, PAST_TEMPLATES, PAST_RARE);
-    const b = buildArchetype(PAST_QUESTIONS, answers, PAST_TEMPLATES, PAST_RARE);
+    const a = buildArchetype(PAST_QUESTIONS, answers, PAST_TEMPLATES);
+    const b = buildArchetype(PAST_QUESTIONS, answers, PAST_TEMPLATES);
     expect(a).toEqual(b);
   });
 
-  it("모든 답이 같은 태그면 희귀 결과(마왕)가 나온다", () => {
-    const answers = answersOf(PAST_QUESTIONS, "power", "power", "power", "power", "power", "power");
-    const result = buildArchetype(PAST_QUESTIONS, answers, PAST_TEMPLATES, PAST_RARE);
-    expect(result?.isRare).toBe(true);
-    if (result?.isRare) expect(result.name).toBe("마왕");
+  it("모든 답이 같은 태그로 몰려도 정상적인 조합을 반환한다(희귀 결과 없음)", () => {
+    const answers = answersOf(
+      PAST_QUESTIONS,
+      "power",
+      "power",
+      "power",
+      "power",
+      "power",
+      "power",
+      "power",
+      "power",
+    );
+    const result = buildArchetype(PAST_QUESTIONS, answers, PAST_TEMPLATES);
+    expect(result).not.toBeNull();
+    expect(result?.classInfo).toBeDefined();
+    expect(result?.race).toBeDefined();
   });
 
   it("주 태그와 부 태그에 따라 직업과 종족이 결정된다", () => {
@@ -46,13 +59,17 @@ describe("buildArchetype (past)", () => {
       "cunning",
       "cunning",
       "power",
+      "wisdom",
+      "cunning",
     );
-    const result = buildArchetype(PAST_QUESTIONS, answers, PAST_TEMPLATES, PAST_RARE);
-    expect(result?.isRare).toBe(false);
-    if (!result?.isRare && result) {
-      expect(["마법사", "흑마법사", "현자", "예언자"]).toContain(result.classInfo.name);
-      expect(["고블린", "하플링", "다크엘프", "수인"]).toContain(result.race.name);
-    }
+    const result = buildArchetype(PAST_QUESTIONS, answers, PAST_TEMPLATES);
+    expect(["마법사", "흑마법사", "현자", "예언자"]).toContain(result?.classInfo.name);
+    expect(["고블린", "하플링", "다크엘프", "수인"]).toContain(result?.race.name);
+  });
+
+  it("질문은 8개다", () => {
+    expect(PAST_QUESTIONS.length).toBe(8);
+    expect(REBIRTH_QUESTIONS.length).toBe(8);
   });
 
   it("서로 다른 답변 패턴으로 다양한 조합이 나온다(50가지 이상)", () => {
@@ -64,8 +81,8 @@ describe("buildArchetype (past)", () => {
       PAST_QUESTIONS.forEach((q) => {
         answers[q.id] = tags[Math.floor(rng() * 4)];
       });
-      const result = buildArchetype(PAST_QUESTIONS, answers, PAST_TEMPLATES, PAST_RARE);
-      if (result && !result.isRare) names.add(result.name);
+      const result = buildArchetype(PAST_QUESTIONS, answers, PAST_TEMPLATES);
+      if (result) names.add(result.name);
     }
     expect(names.size).toBeGreaterThanOrEqual(50);
   });
@@ -81,28 +98,12 @@ describe("buildArchetype (rebirth)", () => {
       "power",
       "power",
       "wisdom",
+      "charm",
+      "power",
     );
-    const result = buildArchetype(REBIRTH_QUESTIONS, answers, REBIRTH_TEMPLATES, REBIRTH_RARE);
-    expect(result?.isRare).toBe(false);
-    if (!result?.isRare && result) {
-      expect(result.description).toContain("환생 후 다음 생에서");
-      expect(result.description).not.toContain("이번 생에서는");
-    }
-  });
-
-  it("모든 답이 같은 태그면 희귀 결과(빛의 용사)가 나온다", () => {
-    const answers = answersOf(
-      REBIRTH_QUESTIONS,
-      "charm",
-      "charm",
-      "charm",
-      "charm",
-      "charm",
-      "charm",
-    );
-    const result = buildArchetype(REBIRTH_QUESTIONS, answers, REBIRTH_TEMPLATES, REBIRTH_RARE);
-    expect(result?.isRare).toBe(true);
-    if (result?.isRare) expect(result.name).toBe("빛의 용사");
+    const result = buildArchetype(REBIRTH_QUESTIONS, answers, REBIRTH_TEMPLATES);
+    expect(result?.description).toContain("환생 후 다음 생에서");
+    expect(result?.description).not.toContain("이번 생에서는");
   });
 });
 
@@ -116,6 +117,8 @@ describe("encodeAnswers / decodeAnswers", () => {
       "charm",
       "power",
       "wisdom",
+      "cunning",
+      "charm",
     );
     const encoded = encodeAnswers(PAST_QUESTIONS, answers);
     const decoded = decodeAnswers(PAST_QUESTIONS, encoded);

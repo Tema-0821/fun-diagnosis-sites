@@ -19,23 +19,12 @@ const TAG_ORDER: readonly Tag[] = ["power", "wisdom", "cunning", "charm"];
 // 템플릿 12개(직업 태그 x 종족 태그, 같은 태그 조합은 제외) — {race}/{class} 자리에 실제 이름이 들어간다.
 export type DescriptionTemplates = Record<Tag, Partial<Record<Tag, string>>>;
 
-export interface RareArchetype {
-  name: string;
-  emoji: string;
-  color: string;
-  description: string;
-}
-
 export interface CombinedArchetype {
   name: string; // "엘프 마법사" 형태
   race: RaceInfo;
   classInfo: ClassInfo;
   description: string;
-  color: string;
-  isRare: false;
 }
-
-export type ArchetypeResult = CombinedArchetype | ({ isRare: true } & RareArchetype);
 
 function fillTemplate(template: string, race: string, className: string): string {
   return template.replaceAll("{race}", race).replaceAll("{class}", className);
@@ -54,22 +43,15 @@ export function buildArchetype(
   questions: readonly QuizQuestion[],
   answers: Record<string, Tag>,
   templates: DescriptionTemplates,
-  rare: RareArchetype,
-): ArchetypeResult | null {
+): CombinedArchetype | null {
   const hasAllAnswers = questions.every((q) => Boolean(answers[q.id]));
   if (!hasAllAnswers) return null;
 
   const counts = scoreTags(questions, answers);
-  const total = questions.length;
-
-  // 모든 답이 하나의 태그로 완전히 몰리면 희귀 결과.
-  const perfectTag = TAG_ORDER.find((tag) => counts[tag] === total);
-  if (perfectTag) {
-    return { ...rare, isRare: true };
-  }
-
   const ranked = [...TAG_ORDER].sort((a, b) => counts[b] - counts[a]);
   const classTag = ranked[0];
+  // 1순위와 2순위가 동점으로 같은 태그일 수는 없으니, 2순위가 없다면(전부 한 태그로 몰린 경우)
+  // 정렬상 바로 다음 태그를 종족 결정에 사용한다.
   const raceTag = ranked[1];
 
   const seedInput = questions.map((q) => `${q.id}:${answers[q.id]}`).join("|");
@@ -86,8 +68,6 @@ export function buildArchetype(
     race,
     classInfo,
     description: fillTemplate(template, race.name, classInfo.name),
-    color: race.feature === "horns" || race.feature === "scales" ? "#c084fc" : "#d4af37",
-    isRare: false,
   };
 }
 

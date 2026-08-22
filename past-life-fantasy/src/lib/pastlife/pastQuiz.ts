@@ -1,4 +1,4 @@
-import type { DescriptionTemplates, QuizQuestion, RareArchetype } from "./archetype";
+import type { DescriptionTemplates, QuizQuestion } from "./archetype";
 
 export const PAST_QUESTIONS: readonly QuizQuestion[] = [
   {
@@ -61,6 +61,26 @@ export const PAST_QUESTIONS: readonly QuizQuestion[] = [
       { label: "먼저 마음을 열고 다가간다", tag: "charm" },
     ],
   },
+  {
+    id: "aftermath",
+    text: "전투가 끝난 뒤 나는?",
+    options: [
+      { label: "곧바로 다음 전투를 준비한다", tag: "power" },
+      { label: "오늘의 전투를 복기하며 배운다", tag: "wisdom" },
+      { label: "전리품이나 정보를 챙긴다", tag: "cunning" },
+      { label: "다친 동료를 먼저 살핀다", tag: "charm" },
+    ],
+  },
+  {
+    id: "stranger",
+    text: "낯선 이를 처음 만났을 때 나는?",
+    options: [
+      { label: "실력으로 기선을 제압한다", tag: "power" },
+      { label: "말없이 관찰하며 판단을 유보한다", tag: "wisdom" },
+      { label: "속내를 슬쩍 떠본다", tag: "cunning" },
+      { label: "먼저 웃으며 다가간다", tag: "charm" },
+    ],
+  },
 ] as const;
 
 // 12개 = 직업 태그(1순위) x 종족 태그(2순위) 조합, 같은 태그끼리는 제외.
@@ -97,12 +117,4 @@ export const PAST_TEMPLATES: DescriptionTemplates = {
     cunning:
       "당신의 전생은 {race} 혈통의 {class}였습니다. 친화력과 재빠른 감각을 함께 지녀, 누구와도 쉽게 가까워지면서도 상황 판단이 빨랐던 존재였죠.",
   },
-};
-
-export const PAST_RARE: RareArchetype = {
-  name: "마왕",
-  emoji: "👑",
-  color: "#c084fc",
-  description:
-    "당신의 전생은 한 시대를 공포에 떨게 한 마왕이었습니다. 누구도 감히 맞서지 못할 압도적인 존재감을 지녔고, 그 자체로 하나의 세력이었죠. 평범한 전생으로는 설명할 수 없는, 극히 드문 결과입니다.",
 };

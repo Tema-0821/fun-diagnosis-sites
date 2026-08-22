@@ -1,4 +1,4 @@
-import type { DescriptionTemplates, QuizQuestion, RareArchetype } from "./archetype";
+import type { DescriptionTemplates, QuizQuestion } from "./archetype";
 
 export const REBIRTH_QUESTIONS: readonly QuizQuestion[] = [
   {
@@ -61,6 +61,26 @@ export const REBIRTH_QUESTIONS: readonly QuizQuestion[] = [
       { label: "온기", tag: "charm" },
     ],
   },
+  {
+    id: "moment",
+    text: "다음 생에서 가장 원하는 순간은?",
+    options: [
+      { label: "모두가 인정하는 승리의 순간", tag: "power" },
+      { label: "오랜 의문이 풀리는 순간", tag: "wisdom" },
+      { label: "아무도 모르게 목표를 이루는 순간", tag: "cunning" },
+      { label: "누군가와 마음이 통하는 순간", tag: "charm" },
+    ],
+  },
+  {
+    id: "avoid",
+    text: "다음 생에서 가장 피하고 싶은 상황은?",
+    options: [
+      { label: "무력하게 밀리는 상황", tag: "power" },
+      { label: "얕은 지식으로 판단하는 상황", tag: "wisdom" },
+      { label: "누군가에게 얽매이는 상황", tag: "cunning" },
+      { label: "혼자 소외되는 상황", tag: "charm" },
+    ],
+  },
 ] as const;
 
 // 12개 = 직업 태그(1순위) x 종족 태그(2순위) 조합. "환생 후 다음 생에서는" 미래형 문장.
@@ -97,12 +117,4 @@ export const REBIRTH_TEMPLATES: DescriptionTemplates = {
     cunning:
       "환생 후 다음 생에서 당신은 {race} 혈통의 {class}로 태어날 운명이에요. 친화력과 재빠른 감각을 함께 갖춰, 누구와도 쉽게 가까워지는 존재가 될 거예요.",
   },
-};
-
-export const REBIRTH_RARE: RareArchetype = {
-  name: "빛의 용사",
-  emoji: "🌟",
-  color: "#facc15",
-  description:
-    "환생 후 다음 생에서 당신은 전설로 남을 빛의 용사로 태어날 운명이에요. 어둠이 짙어질수록 더 밝게 빛나는 존재로, 수많은 이들이 당신의 이야기를 노래하게 될 거예요. 평범한 환생으로는 설명할 수 없는, 극히 드문 결과입니다.",
 };
