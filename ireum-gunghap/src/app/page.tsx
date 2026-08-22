@@ -42,6 +42,17 @@ export default function Home() {
         ※ 재미로 즐기는 콘텐츠이며 과학적 근거가 없습니다. 입력한 정보는 서버로 전송되지 않고
         브라우저에서만 계산됩니다.
       </p>
+
+      <section className="mt-10 w-full text-sm leading-relaxed text-zinc-500">
+        <h2 className="text-base font-semibold text-zinc-700">궁합연구소를 만든 이유</h2>
+        <p className="mt-2">
+          이름궁합과 MBTI 궁합은 서로 다른 방식으로 관계를 재미있게 풀어보는 콘텐츠예요. 이름은
+          두 사람의 이름 자체가 주는 느낌을, MBTI는 성격 유형의 조합이 주는 케미를 살펴보는
+          방식입니다. 어느 쪽이든 결과는 참고용 재미 콘텐츠이며, 회원가입이나 로그인 없이
+          누구나 바로 이용할 수 있어요. 입력한 정보는 서버로 전송되지 않고 브라우저 안에서만
+          계산되어 사라집니다.
+        </p>
+      </section>
     </div>
   );
 }

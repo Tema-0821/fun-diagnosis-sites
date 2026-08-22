@@ -12,6 +12,7 @@ import {
 } from "@/lib/pastlife/archetype";
 import { PAST_QUESTIONS, PAST_TEMPLATES } from "@/lib/pastlife/pastQuiz";
 import { REBIRTH_QUESTIONS, REBIRTH_TEMPLATES } from "@/lib/pastlife/rebirthQuiz";
+import { PastLifeInfo } from "./PastLifeInfo";
 
 type TabKey = "past" | "rebirth";
 
@@ -226,6 +227,8 @@ export function PastLifeApp() {
         ※ 재미로 즐기는 콘텐츠이며 과학적 근거가 없습니다. 답변은 서버로 전송되지 않고
         브라우저에서만 계산됩니다.
       </p>
+
+      <PastLifeInfo />
     </div>
   );
 }
