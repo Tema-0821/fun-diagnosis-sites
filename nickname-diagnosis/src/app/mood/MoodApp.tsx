@@ -3,44 +3,45 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { generateNickname, type NicknameResult } from "@/lib/nickname/generate";
-import { NOUN_EMOJI } from "@/lib/nickname/nounEmoji";
+import { generateMood, todayKST, type MoodResult } from "@/lib/mood/generate";
 import { TabNav } from "@/components/TabNav";
 
-export function NicknameApp() {
+export function MoodApp() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const [name, setName] = useState("");
-  const [result, setResult] = useState<NicknameResult | null>(null);
+  const [result, setResult] = useState<MoodResult | null>(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    // 공유된 링크(?n=...)로 들어왔을 때 URL이라는 외부 상태를 초기 렌더 상태로 동기화하는
-    // 것이라 정당한 케이스.
+    // 공유된 링크(?n=이름&d=날짜)로 들어왔을 때 URL이라는 외부 상태를 초기 렌더 상태로
+    // 동기화하는 것이라 정당한 케이스.
     const n = searchParams.get("n");
-    if (n) {
+    const d = searchParams.get("d");
+    if (n && d) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setName(n);
-      setResult(generateNickname(n));
+      setResult(generateMood(n, d));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const next = generateNickname(name);
+    const today = todayKST();
+    const next = generateMood(name, today);
     if (!next) return;
     setResult(next);
     setCopied(false);
-    router.replace(`/?n=${encodeURIComponent(name.trim())}`);
+    router.replace(`/mood?n=${encodeURIComponent(name.trim())}&d=${today}`);
   }
 
   function handleReset() {
     setResult(null);
     setName("");
     setCopied(false);
-    router.replace("/");
+    router.replace("/mood");
   }
 
   async function handleShare() {
@@ -56,13 +57,13 @@ export function NicknameApp() {
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
       <h1 className="font-heading text-neon-cyan text-center text-3xl tracking-tight">
-        🏷️ 별명 진단기
+        🌈 오늘의 기분
       </h1>
       <p className="mt-2 text-center text-sm text-zinc-400">
-        이름 하나만 입력하면 나만의 별명을 만들어드려요
+        이름 하나만 입력하면 오늘 하루의 기분 모드를 알려드려요
       </p>
 
-      <TabNav active="nickname" />
+      <TabNav active="mood" />
 
       {!result ? (
         <form onSubmit={handleSubmit} className="mt-8 flex w-full flex-col gap-4">
@@ -78,32 +79,16 @@ export function NicknameApp() {
             type="submit"
             className="font-heading mt-2 w-full rounded-lg border-2 border-fuchsia-400 bg-fuchsia-500/20 px-4 py-3 text-lg text-fuchsia-200 shadow-[0_0_16px_rgba(217,70,239,0.4)] transition-transform hover:scale-[1.02] hover:bg-fuchsia-500/30 active:scale-[0.98]"
           >
-            별명 만들기 ✨
+            오늘의 기분 보기 🌈
           </button>
         </form>
       ) : (
         <div className="animate-pop-in card-neon mt-8 w-full rounded-lg p-6 text-center">
-          <div
-            className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-2 border-fuchsia-400/60 bg-fuchsia-500/10 text-5xl shadow-[0_0_20px_rgba(217,70,239,0.4)]"
-            aria-hidden
-          >
-            {NOUN_EMOJI[result.noun] ?? "✨"}
-          </div>
-          <p className="mt-3 text-sm text-zinc-400">{result.name}님의 별명은</p>
-          <p className="font-heading text-neon-pink mt-2 text-2xl">{result.nickname}</p>
+          <p className="text-6xl">{result.mood.emoji}</p>
+          <p className="mt-3 text-sm text-zinc-400">{result.name}님의 오늘 기분은</p>
+          <p className="font-heading text-neon-pink mt-2 text-2xl">{result.mood.name}</p>
 
-          <p className="mt-4 text-sm leading-relaxed text-zinc-300">{result.description}</p>
-
-          <div className="mt-4 flex flex-wrap justify-center gap-2">
-            {result.traits.map((trait) => (
-              <span
-                key={trait}
-                className="rounded-full border border-cyan-400/50 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-300"
-              >
-                {trait}
-              </span>
-            ))}
-          </div>
+          <p className="mt-4 text-sm leading-relaxed text-zinc-300">{result.mood.comment}</p>
 
           <div className="mt-6 flex gap-2">
             <button
@@ -125,8 +110,8 @@ export function NicknameApp() {
       )}
 
       <p className="mt-10 text-center text-xs text-zinc-500">
-        ※ 재미로 즐기는 콘텐츠이며 과학적 근거가 없습니다. 입력한 이름은 서버로 전송되지 않고
-        브라우저에서만 계산됩니다.
+        ※ 재미로 즐기는 콘텐츠이며 과학적 근거가 없습니다. 기분은 매일 자정(한국 시간) 기준으로
+        새로 계산되고, 입력한 이름은 서버로 전송되지 않고 브라우저에서만 계산됩니다.
       </p>
       <Link href="/guide" className="mt-2 text-center text-xs text-cyan-300 hover:text-cyan-200">
         계산 방식 · FAQ 보기 →
