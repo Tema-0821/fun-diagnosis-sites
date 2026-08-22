@@ -88,6 +88,19 @@ export default function Home() {
             →
           </span>
         </Link>
+
+        <Link
+          href="/leadership"
+          className="group flex items-center justify-between rounded-3xl border border-sky-100 bg-gradient-to-r from-sky-50 to-blue-50 px-6 py-6 shadow-sm transition-transform hover:scale-[1.02]"
+        >
+          <div>
+            <p className="text-2xl font-bold text-sky-600">🧭 나의 리더십 스타일</p>
+            <p className="mt-1 text-sm text-zinc-600">혼자서도 알아보는 나의 리더십 유형</p>
+          </div>
+          <span className="text-2xl text-sky-300 transition-transform group-hover:translate-x-1">
+            →
+          </span>
+        </Link>
       </div>
 
       <p className="mt-10 text-center text-xs text-zinc-400">
