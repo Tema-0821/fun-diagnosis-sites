@@ -52,10 +52,10 @@ export function PastLifeApp() {
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
-      <h1 className="text-center text-2xl font-bold tracking-tight text-zinc-900">
+      <h1 className="font-heading text-gold text-center text-3xl tracking-wide">
         🔮 전생 환생 진단
       </h1>
-      <p className="mt-2 text-center text-sm text-zinc-500">
+      <p className="mt-2 text-center text-sm text-zinc-400">
         이름 하나만 입력하면 판타지 세계관 속 나의 전생을 알려드려요
       </p>
 
@@ -67,30 +67,30 @@ export function PastLifeApp() {
             placeholder="이름을 입력하세요"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-center text-base shadow-sm focus:border-indigo-300 focus:outline-none"
+            className="w-full rounded-lg border border-purple-400/40 bg-white/5 px-4 py-3 text-center text-base text-zinc-100 placeholder-zinc-500 focus:border-yellow-400/60 focus:outline-none"
           />
           <button
             type="submit"
-            className="mt-2 w-full rounded-2xl bg-gradient-to-r from-indigo-400 to-purple-400 px-4 py-3 text-base font-semibold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            className="font-heading mt-2 w-full rounded-lg border border-yellow-400/60 bg-gradient-to-r from-purple-900/60 to-indigo-900/60 px-4 py-3 text-lg text-yellow-200 shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
           >
             전생 확인하기 🔮
           </button>
         </form>
       ) : (
-        <div className="animate-pop-in mt-8 w-full rounded-3xl border border-zinc-100 bg-white p-6 text-center shadow-lg">
-          <p className="text-sm text-zinc-500">전설 지수</p>
-          <p className="mt-1 text-5xl font-extrabold text-indigo-600">
+        <div className="card-tarot animate-card-reveal mt-8 w-full rounded-xl p-6 text-center">
+          <p className="text-xs tracking-[0.2em] text-purple-300 uppercase">Legend Score</p>
+          <p className="text-gold mt-1 text-5xl font-bold">
             {result.legendScore}
             <span className="text-2xl">%</span>
           </p>
-          <p className="mt-2 text-base font-bold text-purple-700">{result.gradeTitle}</p>
+          <p className="font-heading mt-2 text-base text-purple-200">{result.gradeTitle}</p>
 
-          <p className="mt-4 text-sm font-semibold text-zinc-800">
-            {result.name}님은 전생에...
-          </p>
-          <p className="mt-1 text-lg font-extrabold text-indigo-600">{result.role}</p>
+          <div className="my-4 border-t border-purple-500/20" />
 
-          <div className="mt-4 flex flex-col gap-3 text-left text-sm leading-relaxed text-zinc-700">
+          <p className="text-sm text-zinc-400">{result.name}님은 전생에...</p>
+          <p className="font-heading text-gold mt-1 text-lg">{result.role}</p>
+
+          <div className="mt-4 flex flex-col gap-3 text-left text-sm leading-relaxed text-zinc-300">
             <p>{result.description}</p>
             <p>✨ {result.rebirth}</p>
           </div>
@@ -99,7 +99,7 @@ export function PastLifeApp() {
             {result.abilities.map((ability) => (
               <span
                 key={ability}
-                className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700"
+                className="rounded-full border border-purple-400/40 bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-200"
               >
                 {ability}
               </span>
@@ -110,14 +110,14 @@ export function PastLifeApp() {
             <button
               type="button"
               onClick={handleShare}
-              className="flex-1 rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50"
+              className="flex-1 rounded-lg border border-purple-400/40 px-4 py-2.5 text-sm font-medium text-purple-200 transition-colors hover:bg-purple-500/10"
             >
               {copied ? "링크 복사됨! ✅" : "결과 공유하기 🔗"}
             </button>
             <button
               type="button"
               onClick={handleReset}
-              className="flex-1 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
+              className="flex-1 rounded-lg border border-yellow-400/60 bg-yellow-500/10 px-4 py-2.5 text-sm font-medium text-yellow-200 transition-colors hover:bg-yellow-500/20"
             >
               다시 하기
             </button>
@@ -125,7 +125,7 @@ export function PastLifeApp() {
         </div>
       )}
 
-      <p className="mt-10 text-center text-xs text-zinc-400">
+      <p className="mt-10 text-center text-xs text-zinc-500">
         ※ 재미로 즐기는 콘텐츠이며 과학적 근거가 없습니다. 입력한 이름은 서버로 전송되지 않고
         브라우저에서만 계산됩니다.
       </p>

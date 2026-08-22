@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Gaegu, Noto_Sans_KR } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const gaegu = Gaegu({
+  variable: "--font-heading",
   subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
+const notoSans = Noto_Sans_KR({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 const SITE_NAME = "이름궁합";
@@ -26,8 +33,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ko" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col bg-gradient-to-b from-rose-50 via-white to-violet-50 text-zinc-900">
+    <html lang="ko" className={`${gaegu.variable} ${notoSans.variable} h-full antialiased`}>
+      <body className="bg-love-pattern flex min-h-full flex-col bg-gradient-to-b from-rose-100 via-pink-50 to-violet-100 text-zinc-900">
         {children}
         <footer className="pb-6 text-center text-xs text-zinc-400">
           <Link href="/privacy" className="hover:text-zinc-600">

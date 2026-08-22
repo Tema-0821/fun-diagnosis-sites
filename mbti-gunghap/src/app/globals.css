@@ -1,11 +1,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
 }
 
 body {
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+}
+
+.font-heading {
+  font-family: var(--font-heading), var(--font-body), sans-serif;
 }
 
 @keyframes pop-in {
@@ -21,4 +26,19 @@ body {
 
 .animate-pop-in {
   animation: pop-in 0.35s ease-out;
+}
+
+@keyframes block-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-block-in {
+  animation: block-in 0.25s ease-out;
 }

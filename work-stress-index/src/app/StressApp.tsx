@@ -12,6 +12,42 @@ function scoreColor(score: number): string {
   return "text-emerald-500";
 }
 
+function scoreStroke(score: number): string {
+  if (score >= 61) return "#ef4444";
+  if (score >= 41) return "#f97316";
+  return "#10b981";
+}
+
+// 반원형 게이지: 둘레 길이(半 pi r, r=80)만큼 dasharray를 잡고 점수 비율만큼만 보이게 offset을 준다.
+const GAUGE_CIRCUMFERENCE = Math.PI * 80;
+
+function StressGauge({ score }: { score: number }) {
+  const offset = GAUGE_CIRCUMFERENCE * (1 - score / 100);
+  return (
+    <svg viewBox="0 0 200 110" className="mx-auto w-56">
+      <path
+        d="M 20 100 A 80 80 0 0 1 180 100"
+        fill="none"
+        stroke="#e7ddc9"
+        strokeWidth="16"
+        strokeLinecap="round"
+      />
+      <path
+        d="M 20 100 A 80 80 0 0 1 180 100"
+        fill="none"
+        stroke={scoreStroke(score)}
+        strokeWidth="16"
+        strokeLinecap="round"
+        strokeDasharray={GAUGE_CIRCUMFERENCE}
+        strokeDashoffset={offset}
+      />
+      <text x="100" y="90" textAnchor="middle" className="font-heading" fontSize="36" fontWeight="700" fill="#27272a">
+        {score}%
+      </text>
+    </svg>
+  );
+}
+
 export function StressApp() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -36,6 +72,7 @@ export function StressApp() {
   }, []);
 
   const allAnswered = QUESTIONS.every((q) => typeof answers[q.id] === "number");
+  const answeredCount = QUESTIONS.filter((q) => typeof answers[q.id] === "number").length;
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -65,28 +102,40 @@ export function StressApp() {
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
-      <h1 className="text-center text-2xl font-bold tracking-tight text-zinc-900">
+      <p className="text-xs tracking-[0.3em] text-zinc-400 uppercase">Weekly Diagnosis</p>
+      <h1 className="font-heading mt-2 text-center text-3xl font-bold tracking-tight text-zinc-900">
         😮‍💨 직장 스트레스 지수
       </h1>
-      <p className="mt-2 text-center text-sm text-zinc-500">
+      <div className="rule-double mt-4 w-16" />
+      <p className="mt-4 text-center text-sm text-zinc-500">
         질문 {QUESTIONS.length}개에 답하면 지금 나의 스트레스 지수를 확인할 수 있어요
       </p>
 
       {!result ? (
-        <form onSubmit={handleSubmit} className="mt-8 flex w-full flex-col gap-5">
+        <form onSubmit={handleSubmit} className="mt-8 flex w-full flex-col">
+          <div className="mb-6 h-1 w-full rounded-full bg-[#e7ddc9]">
+            <div
+              className="h-1 rounded-full bg-orange-400 transition-all"
+              style={{ width: `${(answeredCount / QUESTIONS.length) * 100}%` }}
+            />
+          </div>
+
           {QUESTIONS.map((q, index) => (
-            <div key={q.id} className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-              <p className="text-sm font-medium text-zinc-800">
-                {index + 1}. {q.text}
+            <div key={q.id} className="border-t border-[#e7ddc9] py-5 first:border-t-0 first:pt-0">
+              <p className="flex gap-3 text-sm text-zinc-800">
+                <span className="font-heading text-lg text-orange-400">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="pt-0.5">{q.text}</span>
               </p>
-              <div className="mt-3 grid grid-cols-2 gap-2">
+              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 pl-8">
                 {q.options.map((option) => (
                   <label
                     key={option.label}
-                    className={`cursor-pointer rounded-xl border px-2 py-2 text-center text-xs transition-colors ${
+                    className={`cursor-pointer border-b-2 pb-0.5 text-xs transition-colors ${
                       answers[q.id] === option.score
-                        ? "border-orange-400 bg-orange-50 font-semibold text-orange-700"
-                        : "border-zinc-200 text-zinc-600 hover:bg-zinc-50"
+                        ? "border-orange-400 font-semibold text-orange-600"
+                        : "border-transparent text-zinc-500 hover:text-zinc-700"
                     }`}
                   >
                     <input
@@ -106,21 +155,22 @@ export function StressApp() {
           <button
             type="submit"
             disabled={!allAnswered}
-            className="mt-2 w-full rounded-2xl bg-gradient-to-r from-orange-400 to-red-400 px-4 py-3 text-base font-semibold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+            className="font-heading mt-8 w-full rounded-sm bg-zinc-900 px-4 py-3 text-base font-bold text-[#f7f2e9] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100"
           >
             결과 보기 🔍
           </button>
         </form>
       ) : (
-        <div className="animate-pop-in mt-8 w-full rounded-3xl border border-zinc-100 bg-white p-6 text-center shadow-lg">
-          <p className="text-sm text-zinc-500">나의 스트레스 지수</p>
-          <p className={`mt-2 text-5xl font-extrabold ${scoreColor(result.scorePercent)}`}>
-            {result.scorePercent}
-            <span className="text-2xl">%</span>
+        <div className="animate-pop-in mt-8 w-full border border-[#e7ddc9] bg-white/60 p-6 text-center">
+          <p className="text-xs tracking-[0.2em] text-zinc-400 uppercase">Result</p>
+          <StressGauge score={result.scorePercent} />
+          <p className={`font-heading text-xl font-bold ${scoreColor(result.scorePercent)}`}>
+            {result.band.title}
           </p>
-          <p className="mt-2 text-lg font-bold text-zinc-800">{result.band.title}</p>
 
-          <div className="mt-6 flex flex-col gap-3 text-left text-sm leading-relaxed text-zinc-700">
+          <div className="rule-double my-5 w-full" />
+
+          <div className="flex flex-col gap-3 text-left text-sm leading-relaxed text-zinc-700">
             <p>{result.band.description}</p>
             <p>💡 {result.band.advice}</p>
           </div>
@@ -129,14 +179,14 @@ export function StressApp() {
             <button
               type="button"
               onClick={handleShare}
-              className="flex-1 rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50"
+              className="flex-1 border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
             >
               {copied ? "링크 복사됨! ✅" : "결과 공유하기 🔗"}
             </button>
             <button
               type="button"
               onClick={handleReset}
-              className="flex-1 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
+              className="flex-1 bg-zinc-900 px-4 py-2.5 text-sm font-medium text-[#f7f2e9] transition-colors hover:bg-zinc-700"
             >
               다시 하기
             </button>

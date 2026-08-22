@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Noto_Sans_KR, Noto_Serif_KR } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const notoSerif = Noto_Serif_KR({
+  variable: "--font-heading",
   subsets: ["latin"],
+  weight: ["500", "700"],
+});
+
+const notoSans = Noto_Sans_KR({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 const SITE_NAME = "직장 스트레스 지수";
@@ -26,8 +33,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ko" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col bg-gradient-to-b from-orange-50 via-white to-red-50 text-zinc-900">
+    <html lang="ko" className={`${notoSerif.variable} ${notoSans.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col bg-[#f7f2e9] text-zinc-900">
         {children}
         <footer className="pb-6 text-center text-xs text-zinc-400">
           <Link href="/privacy" className="hover:text-zinc-600">

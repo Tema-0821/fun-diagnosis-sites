@@ -10,6 +10,12 @@ function scoreColor(score: number): string {
   return "text-violet-500";
 }
 
+function scoreRingColor(score: number): string {
+  if (score >= 70) return "#f43f5e";
+  if (score >= 40) return "#f59e0b";
+  return "#a78bfa";
+}
+
 export function CompatibilityApp() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -62,7 +68,7 @@ export function CompatibilityApp() {
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
-      <h1 className="text-center text-2xl font-bold tracking-tight text-zinc-900">
+      <h1 className="font-heading text-center text-4xl font-bold tracking-tight text-rose-500">
         💕 이름궁합
       </h1>
       <p className="mt-2 text-center text-sm text-zinc-500">
@@ -77,53 +83,71 @@ export function CompatibilityApp() {
             placeholder="첫 번째 이름"
             value={nameA}
             onChange={(e) => setNameA(e.target.value)}
-            className="w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-center text-base shadow-sm focus:border-rose-300 focus:outline-none"
+            className="w-full rounded-full border-2 border-rose-200 bg-white/80 px-5 py-3 text-center text-base shadow-sm focus:border-rose-400 focus:outline-none"
           />
-          <div className="flex justify-center text-xl">💗</div>
+          <div className="flex justify-center text-2xl">💗</div>
           <input
             type="text"
             required
             placeholder="두 번째 이름"
             value={nameB}
             onChange={(e) => setNameB(e.target.value)}
-            className="w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-center text-base shadow-sm focus:border-rose-300 focus:outline-none"
+            className="w-full rounded-full border-2 border-rose-200 bg-white/80 px-5 py-3 text-center text-base shadow-sm focus:border-rose-400 focus:outline-none"
           />
           <button
             type="submit"
-            className="mt-2 w-full rounded-2xl bg-gradient-to-r from-rose-400 to-violet-400 px-4 py-3 text-base font-semibold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            className="font-heading mt-2 w-full rounded-full bg-gradient-to-r from-rose-400 to-violet-400 px-4 py-3 text-lg font-bold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
           >
             궁합 보기 ✨
           </button>
         </form>
       ) : (
-        <div className="animate-pop-in mt-8 w-full rounded-3xl border border-zinc-100 bg-white p-6 text-center shadow-lg">
-          <p className="text-sm text-zinc-500">
-            {result.nameA} × {result.nameB}
-          </p>
-          <p className={`mt-2 text-5xl font-extrabold ${scoreColor(result.score)}`}>
-            {result.score}<span className="text-2xl">점</span>
-          </p>
-          <p className="mt-1 text-lg font-bold text-zinc-800">{result.gradeTitle}</p>
+        <div className="animate-pop-in mt-8 w-full rounded-3xl border border-rose-100 bg-white/90 shadow-lg">
+          <div className="px-6 pt-6 pb-4 text-center">
+            <p className="font-heading text-lg text-zinc-600">
+              {result.nameA} <span className="text-rose-400">×</span> {result.nameB}
+            </p>
 
-          <div className="mt-6 flex flex-col gap-3 text-left text-sm leading-relaxed text-zinc-700">
+            <div
+              className="relative mx-auto mt-4 flex h-36 w-36 items-center justify-center rounded-full"
+              style={{
+                background: `conic-gradient(${scoreRingColor(result.score)} ${result.score * 3.6}deg, #fce7f3 0deg)`,
+              }}
+            >
+              <div className="flex h-28 w-28 flex-col items-center justify-center rounded-full bg-white">
+                <p className={`text-4xl font-extrabold ${scoreColor(result.score)}`}>
+                  {result.score}
+                </p>
+                <p className="text-xs text-zinc-400">궁합 점수</p>
+              </div>
+            </div>
+
+            <p className="font-heading mt-3 text-xl font-bold text-zinc-800">
+              {result.gradeTitle}
+            </p>
+          </div>
+
+          <div className="ticket-notch relative border-t-2 border-dashed border-rose-200" />
+
+          <div className="flex flex-col gap-3 px-6 py-6 text-left text-sm leading-relaxed text-zinc-700">
             <p>{result.opening}</p>
             <p>💪 {result.strength}</p>
             <p>⚠️ {result.caution}</p>
             <p>💡 {result.advice}</p>
           </div>
 
-          <div className="mt-6 flex gap-2">
+          <div className="flex gap-2 px-6 pb-6">
             <button
               type="button"
               onClick={handleShare}
-              className="flex-1 rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50"
+              className="flex-1 rounded-full border border-rose-200 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-rose-50"
             >
               {copied ? "링크 복사됨! ✅" : "결과 공유하기 🔗"}
             </button>
             <button
               type="button"
               onClick={handleReset}
-              className="flex-1 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
+              className="flex-1 rounded-full bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
             >
               다시 하기
             </button>

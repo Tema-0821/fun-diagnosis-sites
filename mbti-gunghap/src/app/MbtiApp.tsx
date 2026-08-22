@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { generateCompatibility, type CompatibilityResult } from "@/lib/compatibility/generate";
+import { MBTI_STYLE } from "@/lib/compatibility/colors";
 import { MBTI_TYPES, type MbtiType } from "@/lib/compatibility/types";
 
 function isMbtiType(value: string | null): value is MbtiType {
@@ -13,6 +14,40 @@ function scoreColor(score: number): string {
   if (score >= 70) return "text-sky-500";
   if (score >= 40) return "text-amber-500";
   return "text-violet-500";
+}
+
+function TypePicker({
+  label,
+  selected,
+  onSelect,
+}: {
+  label: string;
+  selected: MbtiType | "";
+  onSelect: (type: MbtiType) => void;
+}) {
+  return (
+    <div>
+      <p className="font-heading text-sm text-zinc-500">{label}</p>
+      <div className="mt-2 grid grid-cols-4 gap-2">
+        {MBTI_TYPES.map((type) => {
+          const style = MBTI_STYLE[type];
+          const isSelected = selected === type;
+          return (
+            <button
+              key={type}
+              type="button"
+              onClick={() => onSelect(type)}
+              className={`font-heading rounded-xl px-2 py-3 text-sm transition-all ${
+                isSelected ? `${style.bgSelected} ring-4 ${style.ring} scale-105` : style.bg
+              }`}
+            >
+              {type}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export function MbtiApp() {
@@ -67,7 +102,7 @@ export function MbtiApp() {
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
-      <h1 className="text-center text-2xl font-bold tracking-tight text-zinc-900">
+      <h1 className="font-heading text-center text-3xl tracking-tight text-zinc-900">
         🧠 MBTI 궁합
       </h1>
       <p className="mt-2 text-center text-sm text-zinc-500">
@@ -75,74 +110,61 @@ export function MbtiApp() {
       </p>
 
       {!result ? (
-        <form onSubmit={handleSubmit} className="mt-8 flex w-full flex-col gap-4">
-          <select
-            required
-            value={typeA}
-            onChange={(e) => setTypeA(e.target.value as MbtiType)}
-            className="w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-center text-base shadow-sm focus:border-sky-300 focus:outline-none"
-          >
-            <option value="">첫 번째 MBTI</option>
-            {MBTI_TYPES.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-          <div className="flex justify-center text-xl">🧩</div>
-          <select
-            required
-            value={typeB}
-            onChange={(e) => setTypeB(e.target.value as MbtiType)}
-            className="w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-center text-base shadow-sm focus:border-sky-300 focus:outline-none"
-          >
-            <option value="">두 번째 MBTI</option>
-            {MBTI_TYPES.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
+        <form onSubmit={handleSubmit} className="mt-8 flex w-full flex-col gap-6">
+          <TypePicker label="첫 번째 MBTI" selected={typeA} onSelect={setTypeA} />
+          <div className="flex justify-center text-2xl">🧩</div>
+          <TypePicker label="두 번째 MBTI" selected={typeB} onSelect={setTypeB} />
           <button
             type="submit"
-            className="mt-2 w-full rounded-2xl bg-gradient-to-r from-sky-400 to-amber-400 px-4 py-3 text-base font-semibold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            disabled={!typeA || !typeB}
+            className="font-heading mt-2 w-full rounded-xl bg-zinc-900 px-4 py-3 text-lg text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100"
           >
             궁합 보기 ✨
           </button>
         </form>
       ) : (
-        <div className="animate-pop-in mt-8 w-full rounded-3xl border border-zinc-100 bg-white p-6 text-center shadow-lg">
-          <p className="text-sm text-zinc-500">
-            {result.typeA} × {result.typeB}
-          </p>
-          <p className={`mt-2 text-5xl font-extrabold ${scoreColor(result.score)}`}>
-            {result.score}
-            <span className="text-2xl">점</span>
-          </p>
-          <p className="mt-1 text-lg font-bold text-zinc-800">{result.gradeTitle}</p>
-
-          <div className="mt-6 flex flex-col gap-3 text-left text-sm leading-relaxed text-zinc-700">
-            <p>{result.opening}</p>
-            <p>💪 {result.strength}</p>
-            <p>⚠️ {result.caution}</p>
-            <p>💡 {result.advice}</p>
+        <div className="animate-pop-in mt-8 w-full overflow-hidden rounded-2xl border-2 border-zinc-900 bg-white shadow-[6px_6px_0_0_#18181b]">
+          <div className="flex">
+            <div className={`flex-1 py-4 text-center ${MBTI_STYLE[result.typeA].bgSelected}`}>
+              <p className="font-heading text-2xl">{result.typeA}</p>
+              <p className="text-xs opacity-80">{MBTI_STYLE[result.typeA].label}</p>
+            </div>
+            <div className={`flex-1 py-4 text-center ${MBTI_STYLE[result.typeB].bgSelected}`}>
+              <p className="font-heading text-2xl">{result.typeB}</p>
+              <p className="text-xs opacity-80">{MBTI_STYLE[result.typeB].label}</p>
+            </div>
           </div>
 
-          <div className="mt-6 flex gap-2">
-            <button
-              type="button"
-              onClick={handleShare}
-              className="flex-1 rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50"
-            >
-              {copied ? "링크 복사됨! ✅" : "결과 공유하기 🔗"}
-            </button>
-            <button
-              type="button"
-              onClick={handleReset}
-              className="flex-1 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
-            >
-              다시 하기
-            </button>
+          <div className="p-6 text-center">
+            <p className={`text-5xl font-extrabold ${scoreColor(result.score)}`}>
+              {result.score}
+              <span className="text-2xl">점</span>
+            </p>
+            <p className="font-heading mt-1 text-lg text-zinc-800">{result.gradeTitle}</p>
+
+            <div className="mt-6 flex flex-col gap-3 text-left text-sm leading-relaxed text-zinc-700">
+              <p>{result.opening}</p>
+              <p>💪 {result.strength}</p>
+              <p>⚠️ {result.caution}</p>
+              <p>💡 {result.advice}</p>
+            </div>
+
+            <div className="mt-6 flex gap-2">
+              <button
+                type="button"
+                onClick={handleShare}
+                className="flex-1 rounded-xl border-2 border-zinc-900 px-4 py-2.5 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100"
+              >
+                {copied ? "링크 복사됨! ✅" : "결과 공유하기 🔗"}
+              </button>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="flex-1 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
+              >
+                다시 하기
+              </button>
+            </div>
           </div>
         </div>
       )}

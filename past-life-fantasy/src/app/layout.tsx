@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Noto_Sans_KR, Song_Myung } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const songMyung = Song_Myung({
+  variable: "--font-heading",
+  weight: "400",
+});
+
+const notoSans = Noto_Sans_KR({
+  variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 const SITE_NAME = "전생 환생 진단";
@@ -26,11 +32,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ko" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col bg-gradient-to-b from-indigo-50 via-white to-purple-50 text-zinc-900">
+    <html lang="ko" className={`${songMyung.variable} ${notoSans.variable} h-full antialiased`}>
+      <body className="bg-starfield flex min-h-full flex-col bg-[#0d0a1f] text-zinc-100">
         {children}
-        <footer className="pb-6 text-center text-xs text-zinc-400">
-          <Link href="/privacy" className="hover:text-zinc-600">
+        <footer className="pb-6 text-center text-xs text-zinc-500">
+          <Link href="/privacy" className="hover:text-zinc-300">
             개인정보처리방침
           </Link>
         </footer>

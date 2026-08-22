@@ -1,11 +1,46 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
 }
 
 body {
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+}
+
+.font-heading {
+  font-family: var(--font-heading), var(--font-body), sans-serif;
+}
+
+.bg-neon-grid {
+  background-image:
+    linear-gradient(rgba(217, 70, 239, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(217, 70, 239, 0.12) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center top;
+}
+
+.text-neon-cyan {
+  color: #22d3ee;
+  text-shadow:
+    0 0 8px rgba(34, 211, 238, 0.7),
+    0 0 20px rgba(34, 211, 238, 0.4);
+}
+
+.text-neon-pink {
+  color: #f472b6;
+  text-shadow:
+    0 0 8px rgba(244, 114, 182, 0.7),
+    0 0 20px rgba(244, 114, 182, 0.4);
+}
+
+.card-neon {
+  background: rgba(24, 24, 27, 0.85);
+  border: 2px solid rgba(34, 211, 238, 0.5);
+  box-shadow:
+    0 0 12px rgba(34, 211, 238, 0.35),
+    0 0 40px rgba(217, 70, 239, 0.15);
 }
 
 @keyframes pop-in {
