@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { SiteNav } from "@/components/SiteNav";
 import {
   buildArchetype,
   decodeAnswers,
@@ -135,6 +136,8 @@ export function PastLifeApp() {
       <p className="mt-2 text-center text-sm text-zinc-400">
         판타지 세계관 속 나의 전생과 다음 생의 모습을 알아보세요
       </p>
+
+      <SiteNav active="/" />
 
       <div className="mt-6 flex w-full gap-2 rounded-lg border border-purple-500/20 bg-white/5 p-1">
         {(Object.keys(TAB_CONFIG) as TabKey[]).map((key) => (
