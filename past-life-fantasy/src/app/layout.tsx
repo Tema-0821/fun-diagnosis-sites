@@ -14,7 +14,7 @@ const notoSans = Noto_Sans_KR({
   weight: ["400", "500", "700"],
 });
 
-const SITE_NAME = "전생 환생 진단";
+const SITE_NAME = "전생 환생 테스트";
 const SITE_URL = "https://past-life-fantasy.vercel.app";
 
 export const metadata: Metadata = {

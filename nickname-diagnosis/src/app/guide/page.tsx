@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "이용 가이드",
-  description: "별명 진단기의 계산 방식과 자주 묻는 질문을 안내합니다.",
+  description: "별명 테스트의 계산 방식과 자주 묻는 질문을 안내합니다.",
 };
 
 const FAQ = [
@@ -29,14 +29,14 @@ export default function GuidePage() {
   return (
     <div className="mx-auto w-full max-w-md px-6 py-12">
       <Link href="/" className="text-sm text-cyan-300 hover:text-cyan-200">
-        ← 별명 진단기로 돌아가기
+        ← 나에게 어울리는 별명은?으로 돌아가기
       </Link>
       <h1 className="font-heading text-neon-cyan mt-3 text-2xl">이용 가이드</h1>
 
       <section className="mt-8">
         <h2 className="font-heading text-neon-cyan text-lg">이런 원리로 만들어져요</h2>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-          별명 진단기는 입력한 이름을 해시값으로 바꾼 뒤, 그 값을 시드로 삼아 형용사·명사·설명·특징
+          별명 테스트는 입력한 이름을 해시값으로 바꾼 뒤, 그 값을 시드로 삼아 형용사·명사·설명·특징
           태그 풀에서 하나씩 결정론적으로 골라 별명을 완성해요. 같은 이름이면 언제 입력해도 항상
           같은 결과가 나오고, 이름이 다르면 조합이 완전히 달라지기 때문에 324가지(형용사 18 ×
           명사 18) 조합 중 하나가 여러분만의 별명이 됩니다. 서버로 이름이 전송되지 않고 전부

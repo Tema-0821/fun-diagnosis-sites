@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "이용 가이드",
-  description: "전생 환생 진단의 계산 방식, 종족·직업 도감, 자주 묻는 질문을 안내합니다.",
+  description: "전생 환생 테스트의 계산 방식, 종족·직업 도감, 자주 묻는 질문을 안내합니다.",
 };
 
 const RACE_COMPENDIUM = [
@@ -53,8 +53,8 @@ const FAQ = [
     a: "네. 답변이 같으면 시드도 항상 같기 때문에 몇 번을 다시 해도 동일한 결과가 나옵니다. 결과 링크를 그대로 공유하면 상대방도 같은 화면을 보게 돼요.",
   },
   {
-    q: "전생과 환생은 왜 따로 진단하나요?",
-    a: "전생은 과거에 어떤 존재였는지, 환생은 다음 생에 어떤 존재가 될지를 묻는 서로 다른 질문이라 하나로 섞지 않았어요. 두 진단은 질문지도, 결과도 완전히 독립적으로 계산됩니다.",
+    q: "전생과 환생은 왜 따로 나누나요?",
+    a: "전생은 과거에 어떤 존재였는지, 환생은 다음 생에 어떤 존재가 될지를 묻는 서로 다른 질문이라 하나로 섞지 않았어요. 두 테스트는 질문지도, 결과도 완전히 독립적으로 계산됩니다.",
   },
   {
     q: "이 결과에 과학적 근거가 있나요?",
@@ -66,14 +66,14 @@ export default function GuidePage() {
   return (
     <div className="mx-auto w-full max-w-md px-6 py-12">
       <Link href="/" className="text-sm text-purple-300 hover:text-purple-200">
-        ← 진단으로 돌아가기
+        ← 나의 전생은?으로 돌아가기
       </Link>
       <h1 className="font-heading text-gold mt-3 text-2xl">이용 가이드</h1>
 
       <section className="mt-8">
         <h2 className="font-heading text-gold text-lg">이런 원리로 만들어져요</h2>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-          전생·환생 진단은 먼저 결과 이미지에 쓸 성별을 고른 뒤, 질문 8개에 대한 답변으로
+          전생·환생 테스트는 먼저 결과 이미지에 쓸 성별을 고른 뒤, 질문 8개에 대한 답변으로
           힘·지혜·기민·친화 4가지 성향 점수를 매깁니다. 가장 높은 성향이 직업을, 두 번째로
           높은 성향이 종족을 결정하고, 답변 전체를 시드로 삼아 그 조합 안에서 구체적인 결과
           하나를 고릅니다. 종족 15종과 직업 16종의 조합이라 나올 수 있는 결과만 100가지가

@@ -104,7 +104,7 @@ export function BurnoutApp() {
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
       <p className="text-xs tracking-[0.3em] text-zinc-400 uppercase">Burnout Check</p>
       <h1 className="font-heading mt-2 text-center text-3xl font-bold tracking-tight text-zinc-900">
-        🕯️ 번아웃 자가진단
+        🕯️ 나의 번아웃 상태는?
       </h1>
       <div className="rule-double mt-4 w-16" />
       <p className="mt-4 text-center text-sm text-zinc-500">
@@ -197,7 +197,7 @@ export function BurnoutApp() {
       )}
 
       <p className="mt-10 text-center text-xs text-zinc-400">
-        ※ 재미로 즐기는 콘텐츠이며 의학적·심리학적 진단이 아닙니다. 답변은 서버로 전송되지 않고
+        ※ 재미로 즐기는 콘텐츠이며 의학적·심리학적 테스트가 아닙니다. 답변은 서버로 전송되지 않고
         브라우저에서만 계산됩니다.
       </p>
     </div>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "환생 진단",
+  title: "나의 환생은?",
   description: "질문 8개로 알아보는 판타지 세계관 속 다음 생의 나.",
 };
 

@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 const TABS = [
-  { href: "/", label: "🕰️ 전생 진단" },
-  { href: "/rebirth", label: "✨ 환생 진단" },
+  { href: "/", label: "🕰️ 나의 전생은?" },
+  { href: "/rebirth", label: "✨ 나의 환생은?" },
   { href: "/companion", label: "🐉 반려 몬스터" },
   { href: "/job", label: "⚔️ 직업 적성" },
 ] as const;

@@ -11,7 +11,7 @@ export function TabNav({ active }: { active: "nickname" | "mood" | "leadership" 
             : "text-zinc-400 hover:text-zinc-200"
         }`}
       >
-        🏷️ 별명 진단
+        🏷️ 나에게 어울리는 별명은?
       </Link>
       <Link
         href="/mood"

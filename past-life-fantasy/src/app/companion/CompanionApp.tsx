@@ -124,7 +124,7 @@ export function CompanionApp() {
         </form>
       ) : (
         <div className="card-tarot animate-card-reveal mt-6 w-full rounded-xl p-6 text-center">
-          <p className="text-xs tracking-[0.2em] text-purple-300 uppercase">반려 몬스터 진단</p>
+          <p className="text-xs tracking-[0.2em] text-purple-300 uppercase">반려 몬스터 테스트</p>
           <p className="mt-3 text-6xl">{result.info.emoji}</p>
           <p className="font-heading text-gold mt-2 text-xl">{result.info.name}</p>
           <p className="mt-3 text-left text-sm leading-relaxed text-zinc-300">

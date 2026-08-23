@@ -15,7 +15,7 @@ const notoSans = Noto_Sans_KR({
   weight: ["400", "500", "700"],
 });
 
-const SITE_NAME = "별명 진단기";
+const SITE_NAME = "별명 테스트";
 const SITE_URL = "https://nickname-diagnosis.vercel.app";
 
 export const metadata: Metadata = {

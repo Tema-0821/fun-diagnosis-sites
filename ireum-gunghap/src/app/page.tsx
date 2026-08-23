@@ -7,7 +7,7 @@ export default function Home() {
         💫 AI궁합
       </h1>
       <p className="mt-2 text-center text-sm text-zinc-500">
-        궁합부터 오늘의 운세까지, 재미로 즐기는 진단을 한곳에서. 회원가입 없이 무료예요.
+        궁합부터 오늘의 운세까지, 재미로 즐기는 테스트를 한곳에서. 회원가입 없이 무료예요.
       </p>
 
       <div className="mt-10 flex w-full flex-col gap-4">

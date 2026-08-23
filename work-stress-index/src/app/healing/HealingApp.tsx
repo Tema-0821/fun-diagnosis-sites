@@ -158,7 +158,7 @@ export function HealingApp() {
       )}
 
       <p className="mt-10 text-center text-xs text-zinc-400">
-        ※ 재미로 즐기는 콘텐츠이며 의학적·심리학적 진단이 아닙니다. 답변은 서버로 전송되지 않고
+        ※ 재미로 즐기는 콘텐츠이며 의학적·심리학적 테스트가 아닙니다. 답변은 서버로 전송되지 않고
         브라우저에서만 계산됩니다.
       </p>
     </div>

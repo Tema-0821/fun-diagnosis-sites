@@ -56,7 +56,7 @@ export function NicknameApp() {
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
       <h1 className="font-heading text-neon-cyan text-center text-3xl tracking-tight">
-        🏷️ 별명 진단기
+        🏷️ 나에게 어울리는 별명은?
       </h1>
       <p className="mt-2 text-center text-sm text-zinc-400">
         이름 하나만 입력하면 나만의 별명을 만들어드려요

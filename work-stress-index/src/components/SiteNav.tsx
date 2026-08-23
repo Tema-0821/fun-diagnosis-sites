@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const TABS = [
   { href: "/", label: "😮‍💨 스트레스 지수" },
-  { href: "/burnout", label: "🕯️ 번아웃 자가진단" },
+  { href: "/burnout", label: "🕯️ 나의 번아웃 상태는?" },
   { href: "/healing", label: "🌿 힐링 방법 추천" },
 ] as const;
 

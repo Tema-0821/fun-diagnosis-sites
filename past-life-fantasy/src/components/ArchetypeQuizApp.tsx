@@ -21,23 +21,23 @@ export type ArchetypeKind = "past" | "rebirth";
 const CONFIG = {
   past: {
     path: "/",
-    heading: "🕰️ 전생 진단",
+    heading: "🕰️ 나의 전생은?",
     subtitle: `질문 ${PAST_QUESTIONS.length}개로 알아보는 나의 전생`,
     questions: PAST_QUESTIONS,
     templates: PAST_TEMPLATES,
     submitLabel: "전생 확인하기 🔮",
     resultLabel: "나의 전생은...",
-    cardTitle: "전생 진단",
+    cardTitle: "나의 전생은?",
   },
   rebirth: {
     path: "/rebirth",
-    heading: "✨ 환생 진단",
+    heading: "✨ 나의 환생은?",
     subtitle: `질문 ${REBIRTH_QUESTIONS.length}개로 알아보는 다음 생의 나`,
     questions: REBIRTH_QUESTIONS,
     templates: REBIRTH_TEMPLATES,
     submitLabel: "다음 생 확인하기 🔮",
     resultLabel: "다음 생의 나는...",
-    cardTitle: "환생 진단",
+    cardTitle: "나의 환생은?",
   },
 } as const;
 

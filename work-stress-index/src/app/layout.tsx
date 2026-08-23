@@ -20,10 +20,10 @@ const SITE_URL = "https://work-stress-index.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: `${SITE_NAME} 진단`, template: `%s | ${SITE_NAME}` },
+  title: { default: "나의 스트레스 지수는?", template: `%s | ${SITE_NAME}` },
   description: "간단한 질문 7개로 지금 나의 직장 스트레스 지수를 재미로 확인해봐요. 회원가입 없이 무료.",
   openGraph: {
-    title: `${SITE_NAME} 진단`,
+    title: "나의 스트레스 지수는?",
     description: "간단한 질문 7개로 지금 나의 직장 스트레스 지수를 재미로 확인해봐요.",
     siteName: SITE_NAME,
     locale: "ko_KR",
