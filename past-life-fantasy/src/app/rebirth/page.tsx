@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 import { ArchetypeQuizApp } from "@/components/ArchetypeQuizApp";
 
-export default function Home() {
+export default function RebirthPage() {
   return (
     <Suspense fallback={null}>
-      <ArchetypeQuizApp kind="past" />
+      <ArchetypeQuizApp kind="rebirth" />
     </Suspense>
   );
 }

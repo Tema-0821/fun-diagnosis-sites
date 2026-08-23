@@ -11,111 +11,84 @@ import {
   encodeAnswers,
   type CombinedArchetype,
   type Gender,
-  type QuizQuestion,
   type Tag,
 } from "@/lib/pastlife/archetype";
 import { PAST_QUESTIONS, PAST_TEMPLATES } from "@/lib/pastlife/pastQuiz";
 import { REBIRTH_QUESTIONS, REBIRTH_TEMPLATES } from "@/lib/pastlife/rebirthQuiz";
 
-type TabKey = "past" | "rebirth";
+export type ArchetypeKind = "past" | "rebirth";
 
-const TAB_CONFIG = {
+const CONFIG = {
   past: {
-    label: "🕰️ 전생 진단",
-    title: "전생 진단",
+    path: "/",
+    heading: "🕰️ 전생 진단",
     subtitle: `질문 ${PAST_QUESTIONS.length}개로 알아보는 나의 전생`,
     questions: PAST_QUESTIONS,
     templates: PAST_TEMPLATES,
     submitLabel: "전생 확인하기 🔮",
     resultLabel: "나의 전생은...",
+    cardTitle: "전생 진단",
   },
   rebirth: {
-    label: "✨ 환생 진단",
-    title: "환생 진단",
+    path: "/rebirth",
+    heading: "✨ 환생 진단",
     subtitle: `질문 ${REBIRTH_QUESTIONS.length}개로 알아보는 다음 생의 나`,
     questions: REBIRTH_QUESTIONS,
     templates: REBIRTH_TEMPLATES,
     submitLabel: "다음 생 확인하기 🔮",
     resultLabel: "다음 생의 나는...",
+    cardTitle: "환생 진단",
   },
 } as const;
 
-function useQuizState(questions: readonly QuizQuestion[]) {
-  const [answers, setAnswers] = useState<Record<string, Tag>>({});
-  const answeredCount = questions.filter((q) => Boolean(answers[q.id])).length;
-  const allAnswered = answeredCount === questions.length;
-  return { answers, setAnswers, answeredCount, allAnswered };
-}
-
-export function PastLifeApp() {
+export function ArchetypeQuizApp({ kind }: { kind: ArchetypeKind }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const config = CONFIG[kind];
 
-  const [tab, setTab] = useState<TabKey>("past");
-  const pastQuiz = useQuizState(PAST_QUESTIONS);
-  const rebirthQuiz = useQuizState(REBIRTH_QUESTIONS);
-  const [pastResult, setPastResult] = useState<CombinedArchetype | null>(null);
-  const [rebirthResult, setRebirthResult] = useState<CombinedArchetype | null>(null);
+  const [answers, setAnswers] = useState<Record<string, Tag>>({});
+  const [result, setResult] = useState<CombinedArchetype | null>(null);
   const [gender, setGender] = useState<Gender | null>(null);
   const [copied, setCopied] = useState(false);
 
+  const answeredCount = config.questions.filter((q) => Boolean(answers[q.id])).length;
+  const allAnswered = answeredCount === config.questions.length;
+
   useEffect(() => {
-    // 공유된 링크(?tab=past|rebirth&a=코드&g=m|f)로 들어왔을 때 URL이라는 외부 상태를 초기 렌더
-    // 상태로 동기화하는 것이라 정당한 케이스.
-    const tabParam = searchParams.get("tab");
+    // 공유된 링크(?a=코드&g=m|f)로 들어왔을 때 URL이라는 외부 상태를 초기 렌더 상태로
+    // 동기화하는 것이라 정당한 케이스.
     const code = searchParams.get("a");
     const genderParam = searchParams.get("g");
     const decodedGender: Gender = genderParam === "f" ? "female" : "male";
-    if (code && (tabParam === "past" || tabParam === "rebirth")) {
-      const questions = tabParam === "past" ? PAST_QUESTIONS : REBIRTH_QUESTIONS;
-      const decoded = decodeAnswers(questions, code);
+    if (code) {
+      const decoded = decodeAnswers(config.questions, code);
       if (decoded) {
-        const templates = tabParam === "past" ? PAST_TEMPLATES : REBIRTH_TEMPLATES;
-        const result = buildArchetype(questions, decoded, templates);
+        const nextResult = buildArchetype(config.questions, decoded, config.templates);
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        setTab(tabParam);
+        setAnswers(decoded);
         setGender(decodedGender);
-        if (tabParam === "past") {
-          pastQuiz.setAnswers(decoded);
-          setPastResult(result);
-        } else {
-          rebirthQuiz.setAnswers(decoded);
-          setRebirthResult(result);
-        }
+        setResult(nextResult);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const config = TAB_CONFIG[tab];
-  const quiz = tab === "past" ? pastQuiz : rebirthQuiz;
-  const result = tab === "past" ? pastResult : rebirthResult;
-  const setResult = tab === "past" ? setPastResult : setRebirthResult;
-
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!gender) return;
-    const next = buildArchetype(config.questions, quiz.answers, config.templates);
+    const next = buildArchetype(config.questions, answers, config.templates);
     if (!next) return;
     setResult(next);
     setCopied(false);
     const genderCode = gender === "female" ? "f" : "m";
-    router.replace(
-      `/?tab=${tab}&a=${encodeAnswers(config.questions, quiz.answers)}&g=${genderCode}`,
-    );
+    router.replace(`${config.path}?a=${encodeAnswers(config.questions, answers)}&g=${genderCode}`);
   }
 
   function handleReset() {
     setResult(null);
-    quiz.setAnswers({});
+    setAnswers({});
     setCopied(false);
-    router.replace("/");
-  }
-
-  function handleTabChange(next: TabKey) {
-    setTab(next);
-    setCopied(false);
-    router.replace("/");
+    router.replace(config.path);
   }
 
   async function handleShare() {
@@ -131,32 +104,11 @@ export function PastLifeApp() {
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 py-12">
       <h1 className="font-heading text-gold text-center text-3xl tracking-wide">
-        🔮 전생 환생 진단
+        {config.heading}
       </h1>
-      <p className="mt-2 text-center text-sm text-zinc-400">
-        판타지 세계관 속 나의 전생과 다음 생의 모습을 알아보세요
-      </p>
+      <p className="mt-2 text-center text-sm text-zinc-400">{config.subtitle}</p>
 
-      <SiteNav active="/" />
-
-      <div className="mt-6 flex w-full gap-2 rounded-lg border border-purple-500/20 bg-white/5 p-1">
-        {(Object.keys(TAB_CONFIG) as TabKey[]).map((key) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => handleTabChange(key)}
-            className={`flex-1 rounded-md py-2 text-sm font-medium transition-colors ${
-              tab === key
-                ? "bg-yellow-500/20 text-yellow-200"
-                : "text-zinc-400 hover:text-zinc-200"
-            }`}
-          >
-            {TAB_CONFIG[key].label}
-          </button>
-        ))}
-      </div>
-
-      <p className="mt-4 text-center text-sm text-zinc-400">{config.subtitle}</p>
+      <SiteNav active={config.path} />
 
       {!result ? (
         <form onSubmit={handleSubmit} className="mt-6 flex w-full flex-col">
@@ -164,7 +116,7 @@ export function PastLifeApp() {
             <div
               className="h-1 rounded-full bg-gradient-to-r from-purple-400 to-yellow-400 transition-all"
               style={{
-                width: `${((quiz.answeredCount + (gender ? 1 : 0)) / (config.questions.length + 1)) * 100}%`,
+                width: `${((answeredCount + (gender ? 1 : 0)) / (config.questions.length + 1)) * 100}%`,
               }}
             />
           </div>
@@ -213,19 +165,17 @@ export function PastLifeApp() {
                   <label
                     key={option.label}
                     className={`cursor-pointer rounded-lg border px-3 py-2 text-sm transition-colors ${
-                      quiz.answers[q.id] === option.tag
+                      answers[q.id] === option.tag
                         ? "border-yellow-400/70 bg-yellow-500/10 text-yellow-200"
                         : "border-white/10 text-zinc-400 hover:border-white/20 hover:text-zinc-200"
                     }`}
                   >
                     <input
                       type="radio"
-                      name={`${tab}-${q.id}`}
+                      name={`${kind}-${q.id}`}
                       className="sr-only"
-                      checked={quiz.answers[q.id] === option.tag}
-                      onChange={() =>
-                        quiz.setAnswers((prev) => ({ ...prev, [q.id]: option.tag }))
-                      }
+                      checked={answers[q.id] === option.tag}
+                      onChange={() => setAnswers((prev) => ({ ...prev, [q.id]: option.tag }))}
                     />
                     {option.label}
                   </label>
@@ -236,7 +186,7 @@ export function PastLifeApp() {
 
           <button
             type="submit"
-            disabled={!quiz.allAnswered || !gender}
+            disabled={!allAnswered || !gender}
             className="font-heading mt-8 w-full rounded-lg border border-yellow-400/60 bg-gradient-to-r from-purple-900/60 to-indigo-900/60 px-4 py-3 text-lg text-yellow-200 shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100"
           >
             {config.submitLabel}
@@ -244,7 +194,7 @@ export function PastLifeApp() {
         </form>
       ) : (
         <div className="card-tarot animate-card-reveal mt-6 w-full rounded-xl p-6 text-center">
-          <p className="text-xs tracking-[0.2em] text-purple-300 uppercase">{config.title}</p>
+          <p className="text-xs tracking-[0.2em] text-purple-300 uppercase">{config.cardTitle}</p>
 
           <div className="mx-auto mt-3 h-36 w-36 overflow-hidden rounded-full border border-yellow-400/40 shadow-[0_0_24px_rgba(212,175,55,0.35)]">
             <Image
