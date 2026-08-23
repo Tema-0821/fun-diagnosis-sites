@@ -34,6 +34,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className={`${songMyung.variable} ${notoSans.variable} h-full antialiased`}>
+      <head>
+        {/* Google AdSense 사이트 연결 확인용 스니펫. 구글이 정적 HTML에서 그대로
+            찾을 수 있도록 next/script 최적화 없이 순수 <script> 태그로 둔다. */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9915051439055619"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="bg-starfield flex min-h-full flex-col bg-[#0d0a1f] text-zinc-100">
         {children}
         <footer className="pb-6 text-center text-xs text-zinc-500">
