@@ -43,7 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           crossOrigin="anonymous"
         />
       </head>
-      <body className="flex min-h-full flex-col bg-[#f7f2e9] text-zinc-900">
+      <body className="bg-paper flex min-h-full flex-col text-zinc-900">
         {children}
         <footer className="pb-6 text-center text-xs text-zinc-400">
           <Link href="/privacy" className="hover:text-zinc-600">

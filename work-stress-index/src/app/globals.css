@@ -17,6 +17,22 @@ body {
   border-top: 3px double #d4c9b0;
 }
 
+.bg-paper {
+  background-color: #f7f2e9;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(217, 119, 6, 0.07), transparent 38%),
+    radial-gradient(circle at 88% 15%, rgba(190, 24, 93, 0.05), transparent 36%),
+    radial-gradient(circle at 15% 85%, rgba(120, 113, 108, 0.05), transparent 36%),
+    radial-gradient(circle at 90% 82%, rgba(217, 119, 6, 0.06), transparent 38%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(120, 100, 60, 0.035) 0px,
+      rgba(120, 100, 60, 0.035) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+}
+
 @keyframes pop-in {
   0% {
     opacity: 0;
